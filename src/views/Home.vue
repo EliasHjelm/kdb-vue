@@ -18,6 +18,8 @@ import addEntryButtons from '@/components/AddEntryButtons.vue';
 import displayEntries from '@/components/DisplayEntries.vue';
 import TDEESettings from '@/components/TDEESettings.vue';
 import macroTargets from '@/components/MacroTargets.vue';
+const lvmNames = require('@/assets/json/lvm-names.json');
+const lvmData = require('@/assets/json/lvm-data-no-id.json');
 
 export default {
   name: 'home',
@@ -27,6 +29,11 @@ export default {
     'display-entries': displayEntries,
     'tdee-settings': TDEESettings,
     'macro-targets': macroTargets
+  },
+  mounted() {
+      this.db.collection('users').get().then(snapshot => {
+        console.log(snapshot.size)
+      })
   }
 }
 </script>
