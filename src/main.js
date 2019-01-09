@@ -1,12 +1,35 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
+import store from './store';
+import firebase from '@firebase/app';
+import config from '../firebase.js';
 
-Vue.config.productionTip = false
+firebase.initializeApp(config);
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
+
+const db = firebase.firestore();
+
+Vue.prototype.db = db;
+
+db.settings({
+  timestampsInSnapshots: true
+});
+
+Vue.config.productionTip = false;
+
+let started = false;
+
+firebase.auth().onAuthStateChanged(function() {
+  if (!started) {
+    new Vue({
+      router,
+      store,
+      render: h => h(App)
+    }).$mount('#app')
+    started = true;
+  }
+})
+
+export default db;

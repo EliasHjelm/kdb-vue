@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Lätt träning",
+    "kcal": 300
+  },
+  {
+    "name": "Hård träning",
+    "kcal": 800
+  },
+  {
+    "name": "e-sport",
+    "kcal": 81
+  },
+  {
+    "name": "Samlag",
+    "kcal": 250
+  },
+  {
+    "name": "Brädspel",
+    "kcal": 35
+  },
+  {
+    "name": "Debatt (stående)",
+    "kcal": 95
+  },
+  {
+    "name": "Debatt (sittande)",
+    "kcal": 45
+  },
+  {
+    "name": "Debatt (TV-sändning)",
+    "kcal": 190
+  },
+  {
+    "name": "Inkomstdeklaration",
+    "kcal": 77
+  },
+  {
+    "name": "Gåsagille",
+    "kcal": 210
+  }
+]

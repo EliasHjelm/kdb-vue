@@ -18,6 +18,9 @@ export default {
   components: {
     'app-header': header,
     'app-footer': footer
+  },
+  created() {
+    this.$store.dispatch('getUser');    
   }
 
 

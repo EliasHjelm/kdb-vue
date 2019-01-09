@@ -14,30 +14,39 @@
       <input type="password" name="login-pwd" placeholder="Lösenord..." v-model="loginPassword" @keyup.enter="login">
     </div>
       <button id="login" @click="login" v-if="!loggedIn">Logga in</button>
-      <button id="register" @click="register" v-if="!loggedIn">Registrera</button>
+      <button id="register" @click="registerUser = true" v-if="!loggedIn">Registrera</button>
 
       <button id="logout" @click="logout" v-if="loggedIn">Logga ut</button>
+  <register-user-modal v-if="registerUser" @close="registerUser = false" />
   </header>
 </template>
 
 <script>
+import registerUserModal from '@/components/RegisterUserModal.vue';
+
 export default {
+  components: {
+    'register-user-modal': registerUserModal
+  },
   data: function() {
     return {
       loginEmail: '',
-      loginPassword: ''
+      loginPassword: '',
+      registerUser: false
     }
   },
   methods: {
-    login() {
-      console.log('Logging in !', this.loginEmail, this.loginPassword); 
-      this.$store.dispatch('login', {email: this.loginEmail});   
-    },
-    register() {
-      console.log('Registering');
+    async login() {
+      const res = await this.$store.dispatch('login', { email: this.loginEmail, password: this.loginPassword }); 
+      if (!res) {
+        this.displayLoginError();
+      }
     },
     logout() {
       this.$store.dispatch('logout');
+    },
+    displayLoginError() {
+      alert('WRONG PASSWORD/USERNAME MOTHAFUKKA'); //a discrete and well-tempered error message
     }
   },
   computed: {
