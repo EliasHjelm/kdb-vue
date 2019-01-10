@@ -31,9 +31,10 @@ export default {
     'macro-targets': macroTargets
   },
   mounted() {
-      this.db.collection('users').get().then(snapshot => {
-        console.log(snapshot.size)
-      })
+      for (let food of lvmData) {
+        this.db.collection('foodItems').doc(food.name).set(food);
+      }
+      console.log('finished all the doxx');
   }
 }
 </script>
