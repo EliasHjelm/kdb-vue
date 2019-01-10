@@ -75,7 +75,7 @@ export default new Vuex.Store({
     totalProtein: state => {
       function reducer(totalProtein, currentEntry) {
         if (currentEntry.type === 'food') {
-          return totalProtein + (currentEntry.nutrition.Prot.value * currentEntry.quantity * 0.01);
+          return totalProtein + (currentEntry.nutrition.prot.value * currentEntry.quantity * 0.01);
         } else {
           return totalProtein
         }
@@ -93,7 +93,7 @@ export default new Vuex.Store({
     totalCarbs: state => {
       function reducer(totalCarbs, currentEntry) {
         if (currentEntry.type === 'food') {
-          return totalCarbs + (currentEntry.nutrition.Kolh.value * currentEntry.quantity * 0.01);
+          return totalCarbs + (currentEntry.nutrition.kolh.value * currentEntry.quantity * 0.01);
         } else {
           return totalCarbs
         }
@@ -111,7 +111,7 @@ export default new Vuex.Store({
     totalFat: state => {
       function reducer(totalFat, currentEntry) {
         if (currentEntry.type === 'food') {
-          return totalFat + (currentEntry.nutrition.Fett.value * currentEntry.quantity * 0.01);
+          return totalFat + (currentEntry.nutrition.fett.value * currentEntry.quantity * 0.01);
         } else {
           return totalFat
         }

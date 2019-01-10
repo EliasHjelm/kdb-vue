@@ -5,9 +5,9 @@
         <h3>Lägg till livsmedel</h3>
       </div>
       <div class="modal-body">
-        <input type="text" name="search-foods" id="search-foods" placeholder="Sök efter livsmedel..." v-model="searchString" @input="getSuggestions">
+        <input type="text" name="search-foods" id="search-foods" placeholder="Sök efter livsmedel..." v-model="searchString">
         <select name="food-search-results" id="food-search-results" size="10" ref="addFoodSelect" @change="selectFoodItem">
-          <option v-for="suggestion in searchSuggestions" :key="suggestion.id">{{ suggestion.name }}</option>
+          <option v-for="suggestion in searchSuggestions" :key="suggestion.id">{{ suggestion }}</option>
         </select>
       </div>
       <div class="modal-footer" v-if="selectedItem.name">
@@ -30,9 +30,9 @@ export default {
     return {
       showModal: false,
       searchString: "",
-      searchSuggestions: [],
       selectedItem: {},
-      inputGrams: 100
+      inputGrams: 100,
+      foodNames: require('@/assets/json/lvm-names.json')
     };
   },
 
@@ -41,11 +41,51 @@ export default {
       return Math.round(
         this.inputGrams * 0.01 * this.selectedItem.nutrition.kcal.value
       );
+    },
+    searchSuggestions() {
+      {
+      const input = this.searchString.toLowerCase();
+      if (!input) {
+        return this.foodNames.slice(0, 20);
+      }
+      const suggestions = this.foodNames.slice(0, 461)
+        .filter(foodName => foodName.toLowerCase().includes(input))
+        .sort((a, b) => {
+          return a < b ? -1 : 1;
+        })
+        .slice(0, 20)
+        .sort((a, b) => {
+          // advanced
+          // prioritize when finding the str
+          // as a separate word
+          let aIsSeparateWord = (" " + a + " ")
+            .toLowerCase()
+            .includes(" " + input + " ");
+          let bIsSeparateWord = (" " + b + " ")
+            .toLowerCase()
+            .includes(" " + input + " ");
+
+          // prioritize input early in name
+          let aPos =
+            a.toLowerCase().indexOf(input) - (aIsSeparateWord ? 1000 : 0);
+          let bPos =
+            b.toLowerCase().indexOf(input) - (bIsSeparateWord ? 1000 : 0);
+
+          if (aPos === bPos) {
+            // if same position
+            // sort alphabetically by name
+            return a < b ? -1 : 1;
+          }
+
+          return aPos < bPos ? -1 : 1;
+        });
+      return suggestions;
+    }
     }
   },
 
   created() {
-    this.getSuggestions();
+    // this.getSuggestions();
   },
 
   methods: {
@@ -56,24 +96,12 @@ export default {
     },
     openAddFoodModal() {
       this.showModal = true;
-      this.getSuggestions();
-    },
-    async getSuggestions() {
-      const response = await fetch("http://localhost:3001/autocomplete", {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          input: this.searchString
-        })
-      });
-      this.searchSuggestions = await response.json();
-      this.$refs.addFoodSelect.scrollTop = 0;
-      this.$refs.addFoodSelect.selectedIndex = -1;
-      this.selectedItem = {};
     },
     async selectFoodItem() {
       const index = this.$refs.addFoodSelect.selectedIndex;
-      this.selectedItem = this.searchSuggestions[index];
+      const foodName = this.searchSuggestions[index];
+      const snapshot = await this.db.collection('foodItems').doc(foodName).get();
+      this.selectedItem = snapshot.data();
       await Vue.nextTick();
       this.$refs.inputGrams.select();
     },
