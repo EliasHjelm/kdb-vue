@@ -11,6 +11,7 @@ firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
 const db = firebase.firestore();
 
+// give all vue instances access to the database connection:
 Vue.prototype.db = db;
 
 db.settings({

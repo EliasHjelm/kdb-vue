@@ -5,8 +5,6 @@ import '@firebase/auth';
 import '@firebase/firestore';
 import db from '@/main.js';
 
-
-
 Vue.use(Vuex);
 
 //Helper functions
@@ -35,7 +33,7 @@ export default new Vuex.Store({
     loggedIn: false,
     selectedDate: formatDate(new Date()),
     dailyEntries: [],
-    unsubscribe: function () { }
+    unsubscribe: function () {  }
   },
 
   getters: {
@@ -187,7 +185,8 @@ export default new Vuex.Store({
     },
     async fetchEntries(context) {
       context.state.unsubscribe();
-      const unsubscribe = db.collection('users')
+      // the return value from onSnapShot() is a function that "unsubscribes" from updates
+      const unsubscribeFunction = db.collection('users')
         .doc(context.state.user.uid)
         .collection('entries')
         .where('date', '==', context.state.selectedDate)
@@ -199,7 +198,7 @@ export default new Vuex.Store({
           })
           context.commit('setEntries', entries);
         })
-      context.commit('setUnsubscribe', unsubscribe);
+      context.commit('setUnsubscribe', unsubscribeFunction);
     },
     async getUser(context) {
       const user = firebase.auth().currentUser
@@ -223,13 +222,3 @@ export default new Vuex.Store({
     }
   }
 })
-
-// the old fetch entries function:
-// const response = await db.collection('entries')
-//         .where('user', '==', this.state.user.uid)
-//         .where('date', '==', this.state.selectedDate).get();
-//       const entries = response.docs.map(snapshot => {
-//         const entry = snapshot.data();
-//         entry.id = snapshot.id;
-//         return entry;
-//       });

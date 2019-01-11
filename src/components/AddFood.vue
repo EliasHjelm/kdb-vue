@@ -55,7 +55,6 @@ export default {
         })
         .slice(0, 20)
         .sort((a, b) => {
-          // advanced
           // prioritize when finding the str
           // as a separate word
           let aIsSeparateWord = (" " + a + " ")
@@ -82,10 +81,6 @@ export default {
       return suggestions;
     }
     }
-  },
-
-  created() {
-    // this.getSuggestions();
   },
 
   methods: {
