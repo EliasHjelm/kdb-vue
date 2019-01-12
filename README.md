@@ -1,29 +1,5 @@
-# vue-cli-1
+## Welcome!
 
-## Project setup
-```
-npm install
-```
+This project is available on GitHub solely for the purpose of showing my work to potential employers. While you are free to view and fork this repository, please note that no license is being offered.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+&copy; 2018-2019 Elias Hjelm All Rights Reserved
