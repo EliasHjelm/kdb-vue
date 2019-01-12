@@ -1,7 +1,9 @@
-function getNutrientTotal(state, nutrient, decimals) {
+function getNutrientTotal(state, nutrient, decimals = 1) {
   function reducer(total, currentEntry) {
     if (currentEntry.type === 'food') {
       return total + (currentEntry.nutrition[nutrient].value * currentEntry.quantity * 0.01);
+    } else {
+      return total
     }
   }
   return state.dailyEntries ? state.dailyEntries.reduce(reducer, 0).toFixed(decimals) : 0
