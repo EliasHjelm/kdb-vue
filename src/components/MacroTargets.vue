@@ -1,35 +1,15 @@
 <template>
-  <div class="macro-targets">
-    <h3>Mål:</h3>
-    <div class="macro-target-bars">
-      <span>Energi</span>
-      <div class="progress-bar energy">
-        <div class="meter" :style="`width: ${getPercent(totalKcal, tdee)}%;`"></div>
-        <span>{{totalKcal}} / {{tdee}} kcal ({{getPercent(totalKcal, tdee)}}%)</span>
-      </div>
-      <span>Protein</span>
-      <div class="progress-bar protein">
-        <div class="meter" :style="`width: ${getPercent(totalProtein, proteinTarget)}%;`"></div>
-        <span>{{totalProtein}} / {{proteinTarget}} g ({{getPercent(totalProtein, proteinTarget)}}%)</span>
-      </div>
-      <span>Kolhydrater</span>
-      <div class="progress-bar carbs">
-        <div class="meter" :style="`width: ${getPercent(totalCarbs, carbsTarget)}%;`"></div>
-        <span>{{totalCarbs}} / {{carbsTarget}} g ({{getPercent(totalCarbs, carbsTarget)}}%)</span>
-      </div>
-      <span>Fett</span>
-      <div class="progress-bar fat">
-        <div class="meter" :style="`width: ${getPercent(totalFat, fatTarget)}%;`"></div>
-        <span>{{totalFat}} / {{fatTarget}} g ({{getPercent(totalFat, fatTarget)}}%)</span>
-      </div>
-    </div>
-  </div>
+  <big-progress-bars v-bind:bars="bars" heading="Mål" />  
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import BigProgressBars from '@/components/BigProgressBars.vue';
 
 export default {
+  components: {
+    BigProgressBars: BigProgressBars
+  },
   computed: {
     ...mapGetters([
       "tdee",
@@ -40,7 +20,43 @@ export default {
       "totalCarbs",
       "fatTarget",
       "totalFat"
-    ])
+    ]),
+    bars: function() {
+      return [
+          {
+          title: 'Energi',
+          percent: this.getPercent(this.totalKcal, this.tdee),
+          total: this.totalKcal,
+          target: this.tdee,
+          unit: ' kcal',
+          color: '#f2f20e'
+        },
+        {
+          title: 'Protein',
+          percent: this.getPercent(this.totalProtein, this.proteinTarget),
+          total: this.totalProtein,
+          target: this.proteinTarget,
+          unit: 'g',
+          color: 'lightblue'
+        },
+        {
+          title: 'Kolhydrater',
+          percent: this.getPercent(this.totalCarbs, this.carbsTarget),
+          total: this.totalCarbs,
+          target: this.carbsTarget,
+          unit: 'g',
+          color: 'teal'
+        },
+        {
+          title: 'Fett',
+          percent: this.getPercent(this.totalFat, this.fatTarget),
+          total: this.totalFat,
+          target: this.fatTarget,
+          unit: 'g',
+          color: 'red'
+        }
+      ]
+    }
   },
 
   methods: {
