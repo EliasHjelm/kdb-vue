@@ -13,44 +13,41 @@ export default {
   computed: {
     ...mapGetters([
       "tdee",
-      "totalKcal",
       "proteinTarget",
-      "totalProtein",
       "carbsTarget",
-      "totalCarbs",
       "fatTarget",
-      "totalFat"
+      "totals"
     ]),
     bars: function() {
       return [
           {
           title: 'Energi',
-          percent: this.getPercent(this.totalKcal, this.tdee),
-          total: this.totalKcal,
+          percent: this.getPercent(this.totals.kcal, this.tdee),
+          total: this.totals.kcal,
           target: this.tdee,
           unit: ' kcal',
           color: '#f2f20e'
         },
         {
           title: 'Protein',
-          percent: this.getPercent(this.totalProtein, this.proteinTarget),
-          total: this.totalProtein,
+          percent: this.getPercent(this.totals.prot, this.proteinTarget),
+          total: this.totals.prot,
           target: this.proteinTarget,
           unit: 'g',
           color: 'lightblue'
         },
         {
           title: 'Kolhydrater',
-          percent: this.getPercent(this.totalCarbs, this.carbsTarget),
-          total: this.totalCarbs,
+          percent: this.getPercent(this.totals.kolh, this.carbsTarget),
+          total: this.totals.kolh,
           target: this.carbsTarget,
           unit: 'g',
           color: 'teal'
         },
         {
           title: 'Fett',
-          percent: this.getPercent(this.totalFat, this.fatTarget),
-          total: this.totalFat,
+          percent: this.getPercent(this.totals.fett, this.fatTarget),
+          total: this.totals.fett,
           target: this.fatTarget,
           unit: 'g',
           color: 'red'

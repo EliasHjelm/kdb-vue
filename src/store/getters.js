@@ -1,26 +1,4 @@
-function getNutrientTotal(state, nutrient, decimals = 1) {
-  function reducer(total, currentEntry) {
-    if (currentEntry.type === 'food') {
-      return total + (currentEntry.nutrition[nutrient].value * currentEntry.quantity * 0.01);
-    } else {
-      return total
-    }
-  }
-  return state.dailyEntries ? state.dailyEntries.reduce(reducer, 0).toFixed(decimals) : 0
-}
-
 const getters = {
-
-  totalKcal: state => {
-    function reducer(totalKcal, currentEntry) {
-      if (currentEntry.type === 'food') {
-        return totalKcal + (currentEntry.nutrition.kcal.value * currentEntry.quantity * 0.01);
-      } else if (currentEntry.type === 'activity') {
-        return totalKcal - (currentEntry.kcal * currentEntry.quantity / 60);
-      }
-    }
-    return state.dailyEntries.reduce(reducer, 0);
-  },
 
   bmr: state => {
     if (state.userData.gender === 'male') {
@@ -47,19 +25,11 @@ const getters = {
     return proteinGrams ? proteinGrams.toFixed(1) : 0;
   },
 
-  totalProtein: state => {
-    return getNutrientTotal(state, 'prot', 1);
-  },
-
   carbsTarget: (state, getters) => {
     const carbRatio = 0.4;
     const carbKcal = getters.tdee * carbRatio;
     const carbGrams = carbKcal / 4;
     return carbGrams ? carbGrams.toFixed(1) : 0;
-  },
-
-  totalCarbs: state => {
-    return getNutrientTotal(state, 'kolh', 1);
   },
 
   fatTarget: (state, getters) => {
@@ -69,8 +39,18 @@ const getters = {
     return fatGrams ? fatGrams.toFixed(1) : 0;
   },
 
-  totalFat: state => {
-    return getNutrientTotal(state, 'fett', 1);
+  totals: state => {
+    const totals = {};
+    for (let entry of state.dailyEntries) {
+      if (entry.type === 'activity') {
+        totals.kcal = +((totals.kcal || 0) - (entry.kcal * entry.quantity / 60)).toFixed(0)
+      } else if (entry.type === 'food') {
+        for (let nutrient in entry.nutrition) {
+          totals[nutrient] = +((totals[nutrient] || 0) + (entry.nutrition[nutrient].value * entry.quantity * 0.01)).toFixed(2);
+        }
+      }
+    }
+    return totals
   }
 }
 
