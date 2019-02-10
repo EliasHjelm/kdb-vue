@@ -23,7 +23,7 @@ export default {
           {
           title: 'Energi',
           percent: this.getPercent(this.totals.kcal, this.tdee),
-          total: this.totals.kcal,
+          total: this.totals.kcal || 0,
           target: this.tdee,
           unit: ' kcal',
           color: '#f2f20e'
@@ -31,7 +31,7 @@ export default {
         {
           title: 'Protein',
           percent: this.getPercent(this.totals.prot, this.proteinTarget),
-          total: this.totals.prot,
+          total: this.totals.prot || 0,
           target: this.proteinTarget,
           unit: 'g',
           color: 'lightblue'
@@ -39,7 +39,7 @@ export default {
         {
           title: 'Kolhydrater',
           percent: this.getPercent(this.totals.kolh, this.carbsTarget),
-          total: this.totals.kolh,
+          total: this.totals.kolh || 0,
           target: this.carbsTarget,
           unit: 'g',
           color: 'teal'
@@ -47,7 +47,7 @@ export default {
         {
           title: 'Fett',
           percent: this.getPercent(this.totals.fett, this.fatTarget),
-          total: this.totals.fett,
+          total: this.totals.fett || 0,
           target: this.fatTarget,
           unit: 'g',
           color: 'red'
@@ -58,7 +58,7 @@ export default {
 
   methods: {
     getPercent(valueOne, valueTwo) {
-      return Math.round((valueOne / valueTwo) * 100);
+      return valueOne && valueTwo ? Math.round((valueOne / valueTwo) * 100) : 0
     }
   }
 };
