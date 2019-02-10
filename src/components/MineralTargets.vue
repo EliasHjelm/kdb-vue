@@ -15,7 +15,18 @@ export default {
   computed: {
     ...mapGetters(["totals", "microTargets"]),
     bars: function() {
-      const minerals = ["kalc", "kopp", "järn", "magn", "fosf", "kali", "sele", "zink", "natr"];
+      const minerals = [
+        "kalc",
+        "kopp",
+        "järn",
+        "magn",
+        "fosf",
+        "kali",
+        "sele",
+        "zink",
+        "natr",
+        "jod"
+      ];
       const bars = [];
       for (let nutrient in this.$store.state.nutrientNames) {
         if (minerals.includes(nutrient)) {

@@ -37,6 +37,10 @@ export default {
     };
   },
 
+  mounted() {
+    this.deselectActivity();
+  },
+
   computed: {
     prospectiveCalories() {
       return Math.round(this.inputMinutes * this.selectedItem.kcal / 60);
@@ -90,6 +94,10 @@ export default {
       this.$refs.addActivitySelect.scrollTop = 0;
       this.$refs.addActivitySelect.selectedIndex = -1;
       this.selectedItem = {};
+    },
+    deselectActivity() {
+      this.selectedItem = {};
+      this.$refs.addActivitySelect.selectedIndex = -1;
     },
     async selectActivity() {
       const index = this.$refs.addActivitySelect.selectedIndex;

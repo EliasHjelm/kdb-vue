@@ -5,7 +5,7 @@
         <h3>Lägg till livsmedel</h3>
       </div>
       <div class="modal-body">
-        <input type="text" name="search-foods" id="search-foods" placeholder="Sök efter livsmedel..." v-model="searchString">
+        <input type="text" name="search-foods" id="search-foods" placeholder="Sök efter livsmedel..." v-model="searchString" @input="deselectFood">
         <select name="food-search-results" id="food-search-results" size="10" ref="addFoodSelect" @change="selectFoodItem">
           <option v-for="suggestion in searchSuggestions" :key="suggestion.id">{{ suggestion }}</option>
         </select>
@@ -36,6 +36,10 @@ export default {
     };
   },
 
+  mounted() {
+    this.deselectFood();
+  },
+
   computed: {
     prospectiveCalories() {
       return Math.round(
@@ -48,7 +52,7 @@ export default {
       if (!input) {
         return this.foodNames.slice(0, 20);
       }
-      const suggestions = this.foodNames.slice(0, 461)
+      const suggestions = this.foodNames
         .filter(foodName => foodName.toLowerCase().includes(input))
         .sort((a, b) => {
           return a < b ? -1 : 1;
@@ -84,6 +88,10 @@ export default {
   },
 
   methods: {
+    deselectFood() {
+      this.selectedItem = {};
+      this.$refs.addFoodSelect.selectedIndex = -1;
+    },
     closeModal() {
       this.showModal = false;
       this.searchString = "";
