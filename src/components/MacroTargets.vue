@@ -1,5 +1,7 @@
 <template>
-  <big-progress-bars v-bind:bars="bars" heading="Mål" />  
+  <div>
+    <big-progress-bars v-bind:bars="bars" heading="Mål" />  
+  </div>
 </template>
 
 <script>
@@ -63,3 +65,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+div {
+  grid-column-start: 1;
+}
+</style>
+

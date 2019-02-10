@@ -65,6 +65,8 @@ const getters = {
     targets.fosf = state.userData.age > 17 ? 600: 700;
     targets.kopp = state.userData.age > 13 ? 0.9 : 0.7;
     targets.jod = 150;
+    targets.vitK = state.userData.gender === 'male' ? 120 : 90;
+    targets.natr = 2400;
 
     if (state.userData.gender === 'male') {
       targets.kali = state.userData.age > 13 ? 3500 : 3300;

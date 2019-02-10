@@ -1,5 +1,7 @@
 <template>
-  <small-progress-bars v-bind:bars="bars" heading="Mål" />  
+  <div>
+    <small-progress-bars v-bind:bars="bars" heading="Allt" />  
+  </div>
 </template>
 
 <script>
@@ -38,3 +40,11 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+div {
+  grid-row: 3 / 5;
+  grid-column-start: 2;
+}
+</style>
+

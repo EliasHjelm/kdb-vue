@@ -6,7 +6,10 @@
     <div class="display-data">
       <display-entries />
       <div class="macros-and-micros">
+
         <macro-targets />
+        <mineral-targets />
+        <vitamin-targets />
         <micro-targets />
       </div>
     </div>
@@ -20,6 +23,8 @@ import displayEntries from '@/components/DisplayEntries.vue';
 import TDEESettings from '@/components/TDEESettings.vue';
 import macroTargets from '@/components/MacroTargets.vue';
 import microTargets from '@/components/MicroTargets.vue';
+import vitaminTargets from '@/components/VitaminTargets.vue';
+import mineralTargets from '@/components/MineralTargets.vue';
 
 export default {
   name: 'home',
@@ -29,7 +34,9 @@ export default {
     'display-entries': displayEntries,
     'tdee-settings': TDEESettings,
     'macro-targets': macroTargets,
-    'micro-targets': microTargets
+    'micro-targets': microTargets,
+    'vitamin-targets': vitaminTargets,
+    'mineral-targets': mineralTargets
   }
 }
 </script>

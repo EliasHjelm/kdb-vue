@@ -6,7 +6,7 @@
       <span class="total">{{ bar.total + ' ' }}</span>
       <span class="unit">{{ bar.unit }}</span>
       <div class="progress-bar">
-        <div class="meter" :style="`width: ${bar.percent}%; background-color: ${bar.color}`"></div>
+        <div class="meter" :style="`width: ${bar.percent}%; background-color: ${bar.percent >= 100 ? 'lightgreen' : 'lightblue'}`"></div>
         <span>{{bar.target ? bar.percent + '%' : 'No target'}}</span>
       </div>
     </div>
