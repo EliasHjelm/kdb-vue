@@ -19,7 +19,7 @@ import displayEntries from '@/components/DisplayEntries.vue';
 import TDEESettings from '@/components/TDEESettings.vue';
 import macroTargets from '@/components/MacroTargets.vue';
 const lvmNames = require('@/assets/json/lvm-names.json');
-const lvmData = require('@/assets/json/lvm-data-no-id.json');
+const lvmData = require('@/assets/json/missing-foods.json');
 
 export default {
   name: 'home',
@@ -31,10 +31,17 @@ export default {
     'macro-targets': macroTargets
   },
   mounted() {
+      // this.saveData();
+  },
+
+  methods: {
+    async saveData() {
       for (let food of lvmData) {
-        this.db.collection('foodItems').doc(food.name).set(food);
+        await this.db.collection('foodItems').doc(food.name).set(food);
+        console.log('saved', food)
       }
       console.log('finished all the doxx');
+    }
   }
 }
 </script>
