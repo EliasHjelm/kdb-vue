@@ -30,6 +30,9 @@ const actions = {
   addEntry(context, payload) {
     context.commit('addEntry', payload);
   },
+  setSelectedEntry(context, payload) {
+    context.commit('setSelectedEntry', payload);
+  },
 
   async fetchEntries(context) {
     context.state.unsubscribe();

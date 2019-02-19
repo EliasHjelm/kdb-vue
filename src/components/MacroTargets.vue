@@ -24,32 +24,32 @@ export default {
       return [
           {
           title: 'Energi',
-          percent: this.getPercent(this.totals.kcal, this.tdee),
-          total: this.totals.kcal || 0,
+          percent: this.getPercent(this.totals.kcal.value, this.tdee),
+          total: this.totals.kcal.value || 0,
           target: this.tdee,
           unit: ' kcal',
           color: '#f2f20e'
         },
         {
           title: 'Protein',
-          percent: this.getPercent(this.totals.prot, this.proteinTarget),
-          total: this.totals.prot || 0,
+          percent: this.getPercent(this.totals.prot.value, this.proteinTarget),
+          total: this.totals.prot.value || 0,
           target: this.proteinTarget,
           unit: 'g',
           color: 'lightblue'
         },
         {
           title: 'Kolhydrater',
-          percent: this.getPercent(this.totals.kolh, this.carbsTarget),
-          total: this.totals.kolh || 0,
+          percent: this.getPercent(this.totals.kolh.value, this.carbsTarget),
+          total: this.totals.kolh.value || 0,
           target: this.carbsTarget,
           unit: 'g',
           color: 'teal'
         },
         {
           title: 'Fett',
-          percent: this.getPercent(this.totals.fett, this.fatTarget),
-          total: this.totals.fett || 0,
+          percent: this.getPercent(this.totals.fett.value, this.fatTarget),
+          total: this.totals.fett.value || 0,
           target: this.fatTarget,
           unit: 'g',
           color: 'red'
@@ -60,7 +60,8 @@ export default {
 
   methods: {
     getPercent(valueOne, valueTwo) {
-      return valueOne && valueTwo ? Math.round((valueOne / valueTwo) * 100) : 0
+      const percent = valueOne && valueTwo ? Math.round((valueOne / valueTwo) * 100) : 0;
+      return percent >= 0 ? percent : 0;
     }
   }
 };

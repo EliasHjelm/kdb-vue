@@ -42,12 +42,21 @@ const getters = {
   totals: state => {
     // loop through the entries, and the nutrients of each entry to get a neat totals object
     const totals = {};
-    for (let entry of state.dailyEntries) {
+    for (let nutrient in state.nutrientNames) {
+      totals[nutrient] = {
+        value: 0,
+        breakdown: {}
+      }
+    }
+    // if we have selected an entry, there will only be one iteration of the loop
+    const entries = (state.selectedEntry) ? [state.selectedEntry] : state.dailyEntries
+    for (let entry of entries) {
       if (entry.type === 'activity') {
-        totals.kcal = +((totals.kcal || 0) - (entry.kcal * entry.quantity / 60)).toFixed(0)
+        totals.kcal.value = +(totals.kcal.value - (entry.kcal * entry.quantity / 60)).toFixed(0)
       } else if (entry.type === 'food') {
         for (let nutrient in entry.nutrition) {
-          totals[nutrient] = +((totals[nutrient] || 0) + (entry.nutrition[nutrient].value * entry.quantity * 0.01)).toFixed(2);
+          totals[nutrient].value = +(totals[nutrient].value + (entry.nutrition[nutrient].value * entry.quantity * 0.01)).toFixed(2);
+          totals[nutrient].breakdown[entry.name] = +(entry.nutrition[nutrient].value * entry.quantity * 0.01).toFixed(2);
         }
       }
     }
@@ -62,7 +71,7 @@ const getters = {
     targets.vitB12 = 2;
     targets.vitC = state.userData.age > 13 ? 75 : 50;
     targets.kalc = state.userData.age > 17 ? 800 : 900;
-    targets.fosf = state.userData.age > 17 ? 600: 700;
+    targets.fosf = state.userData.age > 17 ? 600 : 700;
     targets.kopp = state.userData.age > 13 ? 0.9 : 0.7;
     targets.jod = 150;
     targets.vitK = state.userData.gender === 'male' ? 120 : 90;

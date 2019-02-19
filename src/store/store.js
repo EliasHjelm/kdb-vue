@@ -123,6 +123,7 @@ export default new Vuex.Store({
     loggedIn: false,
     selectedDate: formatDate(new Date()),
     dailyEntries: [],
+    selectedEntry: false,
     unsubscribe: function () {  },
     nutrientNames: nutrientNames,
     nutrientUnits: nutrientUnits

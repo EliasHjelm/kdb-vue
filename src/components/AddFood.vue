@@ -5,13 +5,13 @@
         <h3>Lägg till livsmedel</h3>
       </div>
       <div class="modal-body">
-        <input type="text" name="search-foods" id="search-foods" placeholder="Sök efter livsmedel..." v-model="searchString" @input="deselectFood">
+        <input type="text" name="search-foods" id="search-foods" placeholder="Sök efter livsmedel..." ref="foodSearchInput" v-model="searchString" @input="deselectFood" @keydown.escape="$emit('close')">
         <select name="food-search-results" id="food-search-results" size="10" ref="addFoodSelect" @change="selectFoodItem">
           <option v-for="suggestion in searchSuggestions" :key="suggestion.id">{{ suggestion }}</option>
         </select>
       </div>
       <div class="modal-footer" v-if="selectedItem.name">
-        <input type="number" name="grams" id="grams" v-model="inputGrams" ref="inputGrams" @keyup.enter="addFoodItem"> g - {{ prospectiveCalories }} kcal
+        <input type="number" name="grams" id="grams" v-model="inputGrams" ref="inputGrams" @keyup.enter="addFoodItem" @keydown.escape="$emit('close')"> g - {{ prospectiveCalories }} kcal
         <button @click="addFoodItem">Lägg till</button>
       </div>
     </template>
@@ -38,6 +38,7 @@ export default {
 
   mounted() {
     this.deselectFood();
+    this.$refs.foodSearchInput.focus();
   },
 
   computed: {
@@ -127,6 +128,9 @@ export default {
     },
     addFoodItemLocally(toEnter) {
       this.$store.dispatch("addEntry", toEnter);
+    },
+    closeOnEsc(event) {
+      console.log(event)
     }
   }
 };

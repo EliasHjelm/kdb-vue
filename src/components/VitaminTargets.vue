@@ -33,10 +33,11 @@ export default {
         if (vitamins.includes(nutrient)) {
           const bar = {};
           bar.title = this.$store.state.nutrientNames[nutrient];
-          bar.total = this.totals[nutrient] || 0;
+          bar.total = this.totals[nutrient].value || 0;
           bar.target = this.microTargets[nutrient];
           bar.percent = this.getPercent(bar.total, bar.target);
           bar.unit = this.$store.state.nutrientUnits[nutrient] || "g";
+          bar.breakdown = this.totals[nutrient].breakdown || {};
           bars.push(bar);
         }
       }

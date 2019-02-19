@@ -33,6 +33,10 @@ const mutations = {
     state.dailyEntries.push(entry);
   },
 
+  setSelectedEntry(state, entry) {
+    state.selectedEntry = entry;
+  },
+
   setEntries(state, entries) {
     state.dailyEntries = entries;
   },

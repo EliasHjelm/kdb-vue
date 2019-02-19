@@ -7,10 +7,6 @@
           <slot name="content">
 
           </slot>
-          
-          <!-- <button class="modal-default-button" @click="$emit('close')">
-            <slot name="button text">Ok</slot>
-          </button> -->
         </div>
       </div>
     </div>

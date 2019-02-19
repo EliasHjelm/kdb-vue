@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @click="handleUniversalClick">
     <app-header />
     
     <main>
@@ -21,6 +21,13 @@ export default {
   },
   created() {
     this.$store.dispatch('getUser');    
+  },
+  methods: {
+    handleUniversalClick() {
+      const selected = document.getElementsByClassName('selected-entry')[0];
+      selected && selected.classList.remove('selected-entry');
+      this.$store.dispatch('setSelectedEntry', false);
+    }
   }
 
 
