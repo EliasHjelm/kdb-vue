@@ -1,8 +1,9 @@
 header {
   width: 100%;
-  height: 70px;
+  min-height: 70px;
   background-color: #333;
   padding: 20px 10px 3px 10px;
+  transition: height 0.3s;
 
   h1 {
     color: #eee;
@@ -10,17 +11,42 @@ header {
     display: inline-block;
   }
 
+  .hamburger-menu-icon {
+    position: absolute;
+    top: 20px;
+    right: 50px;
+    height: 30px;
+    width: 30px;
+    display: none;
+    @media screen and (max-width: $breakpoint-tablet) {
+      display: block;
+    }
+  }
+
   nav {
+    
+    position: relative;
     display: inline-block;
     margin: 0 25px;
 
-    a{
+    a.navigation-link{
       color: #eee;
       text-decoration: none;
       cursor: pointer;
       font-size: 110%;
       margin: 0 8px;
+
+      @media screen and (max-width: $breakpoint-tablet) {
+        display: none;
+
+        &.expand {
+          display: block;
+          margin: 0.5rem 0;
+        }
+      }
     }
+
+    
   }
 
   .login {

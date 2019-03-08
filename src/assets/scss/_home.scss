@@ -1,16 +1,31 @@
 .home {
+  grid-column-start: 2;
   display: grid;
-  grid-template-columns: 20% auto;
+  grid-template-columns: max-content auto;
   grid-column-gap: 10px;
   padding: 10px;
   align-items: start;
+  max-width: 1200px;
+  width: 98vw;
 
   .macros-and-micros {
     margin-top: 0.5rem;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto auto auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, auto);
     grid-gap: 1rem;
     align-items: start;
+    @media screen and (min-width: $breakpoint-tablet) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    
+  }
+
+  @media screen and (max-width: $breakpoint-desktop) {
+    grid-template-columns: 1fr;
+    .settings-column {
+      display: none;
+    }
   }
 }

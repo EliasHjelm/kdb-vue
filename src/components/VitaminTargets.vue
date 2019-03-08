@@ -55,8 +55,8 @@ export default {
 
 <style lang="scss" scoped>
 div {
-  grid-column-start: 1;
-  grid-row: 2 / 4;
+  // grid-column-start: 1;
+  // grid-row: 2 / 4;
 }
 </style>
 

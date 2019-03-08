@@ -7,7 +7,6 @@ import db from '@/main.js';
 const actions = {
 
   async login(context, payload) {
-    context.commit('clearUserData');
     const { email, password } = payload;
     const user = await firebase.auth().signInWithEmailAndPassword(email, password);
     if (user) {
@@ -18,6 +17,7 @@ const actions = {
   },
 
   async logout(context) {
+    context.state.unsubscribe();
     await firebase.auth().signOut();
     context.commit('logout');
   },
@@ -33,14 +33,17 @@ const actions = {
   setSelectedEntry(context, payload) {
     context.commit('setSelectedEntry', payload);
   },
-
+  setLoadingEntries(context, payload) {
+    context.commit('setLoadingEntries', payload);
+  },
   async fetchEntries(context) {
+    context.commit('setEntries', []);
+    context.dispatch('setLoadingEntries', true);
     context.state.unsubscribe();
     // the return value from onSnapShot() is a function that "unsubscribes" from updates
-    const unsubscribeFunction = db.collection('users')
+    const unsubscribeFunction = db.collection('entries')
       .doc(context.state.user.uid)
-      .collection('entries')
-      .where('date', '==', context.state.selectedDate)
+      .collection(context.state.selectedDate)
       .onSnapshot((snapshot) => {
         const entries = snapshot.docs.map(snapshot => {
           const entry = snapshot.data();
@@ -48,8 +51,10 @@ const actions = {
           return entry
         })
         context.commit('setEntries', entries);
+        context.dispatch('setLoadingEntries', false);
       })
     context.commit('setUnsubscribe', unsubscribeFunction);
+
   },
 
   async getUser(context) {

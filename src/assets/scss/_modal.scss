@@ -11,12 +11,15 @@
 
   .modal-wrapper {
     display: table-cell;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 
   .modal-container {
     position: relative;
     top: 50px;
-    width: 45vw;
+    width: 100%;
+    max-width: 620px;
     min-height: 10vh;
     margin: 0px auto;
     background-color: #fff;

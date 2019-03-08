@@ -1,10 +1,10 @@
 <template>
   <div class="display-entries">
-    <table>
+    <table v-if="!loadingEntries">
       <tr>
-        <th>Beskrivning</th>
+        <th>Namn</th>
         <th>Mängd</th>
-        <th>Kalorier</th>
+        <th>kcal</th>
         <th>Ta Bort</th>
       </tr>
       <tr v-for="entry in entries" :key="entry.id" @click="selectEntry($event, entry)">
@@ -24,16 +24,24 @@
         </td>
       </tr>
     </table>
+    <app-spinner v-if="loadingEntries" />
   </div>
 </template>
 
 <script>
 import db from "@/main.js";
+import spinner from '@/components/Spinner.vue'
 
 export default {
+  components: {
+    "app-spinner": spinner
+  },
   computed: {
     entries() {
       return this.$store.state.dailyEntries;
+    },
+    loadingEntries() {
+      return this.$store.state.loadingEntries
     }
   },
 
@@ -47,9 +55,9 @@ export default {
     },
 
     updateQuantity(entryId, quantity) {
-      db.collection("users")
+      db.collection("entries")
         .doc(this.$store.state.user.uid)
-        .collection("entries")
+        .collection(this.$store.state.selectedDate)
         .doc(entryId)
         .set(
           {
@@ -62,15 +70,15 @@ export default {
     async deleteEntry(entryId) {
 
       this.$store.dispatch('setSelectedEntry', false);
-      // error handling does not work
+      // error handling does not work atm
       try {
-        await db
-          .collection("users")
-          .doc(this.$store.state.user.uid)
+        const result = await db
           .collection("entries")
+          .doc(this.$store.state.user.uid)
+          .collection(this.$store.state.selectedDate)
           .doc(entryId)
           .delete();
-        console.log("Document successfully deleted:", entryId);
+        console.log("Document successfully deleted:", result);
       } catch (error) {
         console.error("Could not remove document:", entryId);
       }
@@ -78,7 +86,6 @@ export default {
 
     selectEntry(event, entry) {
       event.stopPropagation();
-      console.log(event.srcElement.outerHTML);
       if (event.srcElement.outerHTML !== '<input type="number">' && event.srcElement.outerHTML !== '<button>X</button>') {
         for (let child of event.srcElement.parentElement.parentElement.children) {
           child.classList.remove("selected-entry");

@@ -29,6 +29,10 @@ const mutations = {
     this.dispatch('fetchEntries');
   },
 
+  setLoadingEntries(state, loading) {
+    state.loadingEntries = loading
+  },
+
   addEntry(state, entry) {
     state.dailyEntries.push(entry);
   },

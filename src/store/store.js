@@ -62,7 +62,7 @@ const nutrientNames = {
   mätt: 'Summa mättade fettsyror',
   natr: 'Natrium',
   niac: 'Niacin',
-  niek: 'Niacinekvivalenter',
+  niek: 'Vitamin B3',
   prot: 'Protein',
   reti: 'Retinol',
   ribo: 'Riboflavin',
@@ -126,7 +126,8 @@ export default new Vuex.Store({
     selectedEntry: false,
     unsubscribe: function () {  },
     nutrientNames: nutrientNames,
-    nutrientUnits: nutrientUnits
+    nutrientUnits: nutrientUnits,
+    loadingEntries: false
   },
 
   getters: getters,

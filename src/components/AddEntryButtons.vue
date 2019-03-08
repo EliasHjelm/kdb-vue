@@ -1,9 +1,8 @@
 <template>
   <div class="add-entry-buttons">
     <div>
-      <button class="open-add-food" @click="addFood = true">Lägg till livsmedel</button>
-      <button class="open-add-activity" @click="addActivity = true">Lägg till aktivitet</button>
-      <button class="open-add-data">Lägg till data</button>
+      <button class="open-add-food" @click="addFood = true">+livsmedel</button>
+      <button class="open-add-activity" @click="addActivity = true">+aktivitet</button>
     </div>
 
     <add-food v-if="addFood" @close="addFood = false" />

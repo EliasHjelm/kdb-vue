@@ -1,13 +1,14 @@
 <template>
 <section>
   <h3>{{ heading }}</h3>
-    <div class="bar" v-for="bar in bars" :key="bar.id">
-      <span>{{ bar.title }}</span>
-      <div class="progress-bar">
-        <div class="meter" :style="`width: ${bar.percent}%; background-color: ${bar.color}`"></div>
-        <span>{{ `${bar.total}${bar.unit} / ${bar.target}${bar.unit} (${bar.percent}%)` }}</span>
-        
-      </div>
+    <div class="bars">
+      <template v-for="(bar, index) in bars">
+        <span :key="index + 'span'">{{ bar.title }}</span>
+        <div :key="index + 'div'" class="progress-bar">
+          <div class="meter" :style="`width: ${bar.percent}%; background-color: ${bar.color}`"></div>
+          <span>{{ `${bar.total}${bar.unit} / ${bar.target}${bar.unit} (${bar.percent}%)` }}</span>          
+        </div>
+      </template>
     </div>
 </section>
   
@@ -47,10 +48,10 @@ section {
     margin-bottom: 1rem;
   }
 
-  .bar {
+  .bars {
     display: grid;
-    grid-template-columns: 25% auto;
-    grid-row-gap: 0.6rem;
+    grid-template-columns: auto 1fr;
+    grid-gap: 0.5rem;
     align-items: center;
     margin-bottom: 0.3rem;
 
@@ -83,6 +84,9 @@ section {
         vertical-align: middle;
         line-height: 1.5rem;
         width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }

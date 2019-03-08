@@ -1,27 +1,48 @@
 <template>
   <section>
     <h3>{{ heading }}</h3>
-    <div class="bar" v-for="bar in bars" :key="bar.id">
-      <span class="title">{{ bar.title }}</span>
-      <span class="total">{{ bar.total + ' ' }}</span>
-      <span class="unit">{{ bar.unit }}</span>
-      <!-- We have to use $set (alias for Vue.set) to make the property reactive -->
-      <div class="progress-bar" @mouseover="$set(showTooltips, bar.title, true)" @mouseleave="showTooltips[bar.title] = false">
-        <div class="meter" :style="`width: ${bar.percent}%; background-color: ${bar.percent >= 100 ? 'lightgreen' : 'lightblue'}`"></div>
-        <span>{{bar.target ? bar.percent + '%' : 'No target'}}</span>
-      </div>
-      <div class="tooltip" v-show="showTooltips[bar.title]">
-        <h4>
-          {{ bar.title }}
-        </h4>
-        <span class="tooltip-total">{{ bar.total + ' ' + bar.unit }}</span>
-        <span class="tooltip-percent">{{ bar.percent }}%</span>
-        <template v-for="(amount, entry) in bar.breakdown">
-          <span :key="`entry-${entry}`" class="tooltip-breakdown-entry">{{ entry }}</span>
-          <span :key="`amount-${entry}`" class="tooltip-breakdown-amount">{{ amount + ' ' + bar.unit }}</span>
-          <span :key="`percent-${entry}`" class="tooltip-breakdown-percent"><strong>{{ getPercent(amount, bar.target) }}%</strong></span>
-        </template>
-      </div>
+    <div class="bars">
+      <template v-for="(bar, index) in bars">
+        <span class="title" :key="index + 'tit'">{{ bar.title }}</span>
+        <span class="total" :key="index + 'tot'">{{ bar.total + ' ' }}</span>
+        <span class="unit" :key="index + 'u'">
+          {{ bar.unit }}
+          <!-- Putting the tooltips in here for positioning -->
+          <div
+            class="tooltip"
+            v-show="showTooltips[bar.title]"
+            @mouseover="showTooltips[bar.title] = true"
+            @mouseleave="showTooltips[bar.title] = false"
+          >
+            <h4>{{ bar.title }}</h4>
+            <span class="tooltip-total">{{ bar.total + ' ' + bar.unit }}</span>
+            <span class="tooltip-percent">{{ bar.percent }}%</span>
+            <template v-for="(entry, index) in bar.breakdown">
+              <span :key="`entry-${index}`" class="tooltip-breakdown-entry">{{ entry.name }}</span>
+              <span
+                :key="`amount-${index}`"
+                class="tooltip-breakdown-amount"
+              >{{ entry.value + ' ' + bar.unit }}</span>
+              <span :key="`percent-${index}`" class="tooltip-breakdown-percent">
+                <strong>{{ getPercent(entry.value, bar.target) }}%</strong>
+              </span>
+            </template>
+          </div>
+        </span>
+        <!-- We have to use $set (alias for Vue.set) to make the property reactive -->
+        <div
+          class="progress-bar"
+          :key="index + 'p'"
+          @mouseover="$set(showTooltips, bar.title, true)"
+          @mouseleave="showTooltips[bar.title] = false"
+        >
+          <div
+            class="meter"
+            :style="`width: ${bar.percent}%; background-color: ${bar.percent >= 100 ? 'lightgreen' : 'lightblue'}`"
+          ></div>
+          <span class="progress">{{bar.target ? bar.percent + '%' : 'No target'}}</span>
+        </div>
+      </template>
     </div>
   </section>
 </template>
@@ -43,10 +64,10 @@ export default {
       validator: function(value) {
         return value.length > 2 && value.length < 15;
       }
-    },
+    }
   },
   data: function() {
-    return { showTooltips: {} }
+    return { showTooltips: {} };
   },
   methods: {
     getPercent(valueOne, valueTwo) {
@@ -66,11 +87,10 @@ section {
     margin-bottom: 1rem;
   }
 
-  .bar {
+  .bars {
     display: grid;
-    grid-template-columns: 40% 15% 10% auto;
-    grid-row-gap: 0.6rem;
-    grid-column-gap: 0.6rem;
+    grid-template-columns: minmax(max-content, 1fr) min-content min-content 1fr;
+    grid-gap: 0.4rem;
     align-items: center;
     margin-bottom: 0.3rem;
     position: relative;
@@ -85,7 +105,8 @@ section {
     }
 
     span.unit {
-      grid-column-start: 3
+      grid-column-start: 3;
+      position: relative;
     }
 
     .progress-bar {
@@ -106,7 +127,7 @@ section {
         max-width: 100%;
       }
 
-      span {
+      span.progress {
         position: absolute;
         top: 0;
         left: 0;
@@ -118,14 +139,15 @@ section {
 
     .tooltip {
       position: absolute;
-      left: -10%;
+      top: -1rem;
+      right: -2rem;
       background-color: whitesmoke;
       border: 1px solid black;
       display: grid;
-      grid-template-columns: auto auto auto;
+      grid-template-columns: auto max-content max-content;
+      min-width: 220px;
       grid-column-gap: 0.5rem;
       grid-row-gap: 0.2rem;
-      width: 80%;
       z-index: 3;
       padding: 0.2rem;
 
@@ -145,7 +167,7 @@ section {
       .tooltip-breakdown-entry {
         font-size: 85%;
         overflow: hidden;
-        white-space:nowrap;
+        white-space: nowrap;
         text-overflow: ellipsis;
       }
 
@@ -153,10 +175,6 @@ section {
         font-size: 85%;
         font-weight: 600;
       }
-
-
-
-
     }
   }
 }

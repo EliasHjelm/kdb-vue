@@ -55,7 +55,7 @@ export default {
     },
     userAge: {
       get: function() {
-        return this.$store.state.userData.age
+        return this.$store.state.userData.age || 28
       },
       set: function() {
         this.$store.dispatch('setUserData', { age: +this.$refs.age.value });

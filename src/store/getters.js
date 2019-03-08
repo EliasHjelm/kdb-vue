@@ -1,3 +1,16 @@
+// formatting function
+Number.prototype._format = function() {
+  return this < 1 
+        ?
+        this.toFixed(2)
+        :
+        this < 100
+        ?
+        this.toFixed(1)
+        :
+        this.toFixed(0)
+}
+
 const getters = {
 
   bmr: state => {
@@ -22,21 +35,21 @@ const getters = {
     const proteinRatio = 0.2;
     const proteinKcal = getters.tdee * proteinRatio;
     const proteinGrams = proteinKcal / 4;
-    return proteinGrams ? proteinGrams.toFixed(1) : 0;
+    return proteinGrams ? proteinGrams._format() : 0;
   },
 
   carbsTarget: (state, getters) => {
     const carbRatio = 0.4;
     const carbKcal = getters.tdee * carbRatio;
     const carbGrams = carbKcal / 4;
-    return carbGrams ? carbGrams.toFixed(1) : 0;
+    return carbGrams ? carbGrams._format() : 0;
   },
 
   fatTarget: (state, getters) => {
     const fatRatio = 0.4;
     const fatKcal = getters.tdee * fatRatio;
     const fatGrams = fatKcal / 9;
-    return fatGrams ? fatGrams.toFixed(1) : 0;
+    return fatGrams ? fatGrams._format() : 0;
   },
 
   totals: state => {
@@ -45,20 +58,33 @@ const getters = {
     for (let nutrient in state.nutrientNames) {
       totals[nutrient] = {
         value: 0,
-        breakdown: {}
+        breakdown: []
       }
     }
     // if we have selected an entry, there will only be one iteration of the loop
     const entries = (state.selectedEntry) ? [state.selectedEntry] : state.dailyEntries
     for (let entry of entries) {
       if (entry.type === 'activity') {
-        totals.kcal.value = +(totals.kcal.value - (entry.kcal * entry.quantity / 60)).toFixed(0)
+        totals.kcal.value = +(totals.kcal.value - (entry.kcal * entry.quantity / 60))._format()
       } else if (entry.type === 'food') {
         for (let nutrient in entry.nutrition) {
-          totals[nutrient].value = +(totals[nutrient].value + (entry.nutrition[nutrient].value * entry.quantity * 0.01)).toFixed(2);
-          totals[nutrient].breakdown[entry.name] = +(entry.nutrition[nutrient].value * entry.quantity * 0.01).toFixed(2);
+          totals[nutrient].value = +(totals[nutrient].value + (entry.nutrition[nutrient].value * entry.quantity * 0.01))._format();
+          // prevent duplicate entries in totals object (ie display 100g of raisins and 20g of raisins together as 120g)
+          const indexOfFood = totals[nutrient].breakdown.findIndex(obj => obj.name === entry.name);
+          if (indexOfFood === -1) {
+            totals[nutrient].breakdown.push({
+              name: entry.name,
+              value: +(entry.nutrition[nutrient].value * entry.quantity * 0.01)._format()
+            });
+          } else {
+            // this way prevents '146.000000000000002' results when we add stuff together
+            totals[nutrient].breakdown[indexOfFood].value = +(totals[nutrient].breakdown[indexOfFood].value +(entry.nutrition[nutrient].value * entry.quantity * 0.01))._format();
+          }
         }
       }
+    }
+    for (let nutrient in totals) {
+      totals[nutrient].breakdown.sort((a, b) => b.value - a.value)
     }
     return totals
   },

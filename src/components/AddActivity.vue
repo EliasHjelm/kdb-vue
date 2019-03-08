@@ -111,7 +111,6 @@ export default {
       toEnter.date = this.$store.state.selectedDate;
       toEnter.quantity = Number(this.inputMinutes);
       toEnter.unit = "min";
-      toEnter.user = this.$store.state.user.uid;
       if (this.$store.state.loggedIn) {
         this.addActivityToDB(toEnter);
       } else {
@@ -120,7 +119,7 @@ export default {
       this.$emit("close");
     },
     async addActivityToDB(toEnter) {
-      await this.db.collection('users').doc(this.$store.state.user.uid).collection('entries').add(toEnter);
+      await this.db.collection('entries').doc(this.$store.state.user.uid).collection(this.$store.state.selectedDate).add(toEnter);
     },
     addActivityLocally(toEnter) {
       this.$store.dispatch("addEntry", toEnter);

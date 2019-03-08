@@ -10,9 +10,12 @@
           <option v-for="suggestion in searchSuggestions" :key="suggestion.id">{{ suggestion }}</option>
         </select>
       </div>
-      <div class="modal-footer" v-if="selectedItem.name">
-        <input type="number" name="grams" id="grams" v-model="inputGrams" ref="inputGrams" @keyup.enter="addFoodItem" @keydown.escape="$emit('close')"> g - {{ prospectiveCalories }} kcal
-        <button @click="addFoodItem">Lägg till</button>
+      <div class="modal-footer">
+        <template v-if="selectedItem.name">
+          <input type="number" name="grams" id="grams" v-model="inputGrams" ref="inputGrams" @keyup.enter="addFoodItem" @keydown.escape="$emit('close')"> g - {{ prospectiveCalories }} kcal
+          <button @click="addFoodItem">Lägg till</button>
+        </template>
+        <app-spinner v-if="this.loadingFoodItem" />
       </div>
     </template>
   </app-modal>  
@@ -21,10 +24,12 @@
 <script>
 import modal from "@/components/Modal.vue";
 import Vue from "vue";
+import spinner from '@/components/Spinner.vue';
 
 export default {
   components: {
-    "app-modal": modal
+    "app-modal": modal,
+    "app-spinner": spinner
   },
   data() {
     return {
@@ -32,7 +37,8 @@ export default {
       searchString: "",
       selectedItem: {},
       inputGrams: 100,
-      foodNames: require('@/assets/json/lvm-names.json')
+      foodNames: require('@/assets/json/lvm-names.json'),
+      loadingFoodItem: false
     };
   },
 
@@ -102,10 +108,13 @@ export default {
       this.showModal = true;
     },
     async selectFoodItem() {
+      this.selectedItem = false
+      this.loadingFoodItem = true;
       const index = this.$refs.addFoodSelect.selectedIndex;
       const foodName = this.searchSuggestions[index];
       const snapshot = await this.db.collection('foodItems').doc(foodName).get();
       this.selectedItem = snapshot.data();
+      this.loadingFoodItem = false;
       await Vue.nextTick();
       this.$refs.inputGrams.select();
     },
@@ -115,7 +124,6 @@ export default {
       toEnter.date = this.$store.state.selectedDate;
       toEnter.quantity = Number(this.inputGrams);
       toEnter.unit = "g";
-      toEnter.user = this.$store.state.user.uid;
       if (this.$store.state.loggedIn) {
         this.addFoodItemToDB(toEnter);
       } else {
@@ -124,13 +132,10 @@ export default {
       this.$emit("close");
     },
     async addFoodItemToDB(toEnter) {
-      await this.db.collection('users').doc(this.$store.state.user.uid).collection('entries').add(toEnter);
+      await this.db.collection('entries').doc(this.$store.state.user.uid).collection(this.$store.state.selectedDate).add(toEnter);
     },
     addFoodItemLocally(toEnter) {
       this.$store.dispatch("addEntry", toEnter);
-    },
-    closeOnEsc(event) {
-      console.log(event)
     }
   }
 };

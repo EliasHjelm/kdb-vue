@@ -1,5 +1,4 @@
 .add-entry-buttons {
-  grid-column-start: 2;
 
   button {
     padding: 0.5rem;
@@ -12,4 +11,6 @@
       background-color: #ccc
     }
   }
+
+  margin-bottom: 0.5rem;
 }

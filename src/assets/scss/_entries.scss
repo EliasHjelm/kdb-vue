@@ -1,5 +1,4 @@
 .display-entries {
-  grid-column-start: 2;
 
   table {
     width: 100%;
@@ -19,11 +18,27 @@
 
     th {
       font-weight: 700;
-      padding: 12px;
+      padding: 0.5rem;
     }
 
     td {
-      padding: 3px 12px;
+      padding: 0.2rem 0.6rem;
+
+      &:nth-child(1) {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      &:nth-child(2) {
+        white-space: nowrap;
+      }
+
+      button {
+        cursor: pointer;
+        color: red;
+        background-color: black;
+        border-radius: 0.2rem;
+      }
       
       input {
         width: 50px;

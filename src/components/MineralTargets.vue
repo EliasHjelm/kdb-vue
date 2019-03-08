@@ -53,9 +53,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-div {
-  grid-column-start: 2;
-  grid-row: 1 / 3;
+@media screen and (min-width: $breakpoint-tablet) {
+  div {
+    grid-row: 1 / 3
+  }
 }
+
 </style>
 

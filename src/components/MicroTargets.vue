@@ -43,8 +43,8 @@ export default {
 
 <style lang="scss" scoped>
 div {
-  grid-row: 3 / 5;
-  grid-column-start: 2;
+  // grid-row: 3 / 5;
+  // grid-column-start: 2;
 }
 </style>
 

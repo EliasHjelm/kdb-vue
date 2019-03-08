@@ -1,3 +1,4 @@
+@import 'variables';
 @import 'reset';
 @import 'header';
 @import 'home';
@@ -27,7 +28,9 @@ body {
   }
 
   main {
-    flex: 1
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr min-content 1fr;
   }
 
   * {

@@ -1,12 +1,12 @@
 <template>
   <div>
-    <big-progress-bars v-bind:bars="bars" heading="Mål" />  
+    <big-progress-bars v-bind:bars="bars" heading="Mål"/>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import BigProgressBars from '@/components/BigProgressBars.vue';
+import BigProgressBars from "@/components/BigProgressBars.vue";
 
 export default {
   components: {
@@ -22,45 +22,46 @@ export default {
     ]),
     bars: function() {
       return [
-          {
-          title: 'Energi',
+        {
+          title: "Energi",
           percent: this.getPercent(this.totals.kcal.value, this.tdee),
           total: this.totals.kcal.value || 0,
           target: this.tdee,
-          unit: ' kcal',
-          color: '#f2f20e'
+          unit: " kcal",
+          color: "#f2f20e"
         },
         {
-          title: 'Protein',
+          title: "Protein",
           percent: this.getPercent(this.totals.prot.value, this.proteinTarget),
           total: this.totals.prot.value || 0,
           target: this.proteinTarget,
-          unit: 'g',
-          color: 'lightblue'
+          unit: "g",
+          color: "lightblue"
         },
         {
-          title: 'Kolhydrater',
+          title: "Kolhydrater",
           percent: this.getPercent(this.totals.kolh.value, this.carbsTarget),
           total: this.totals.kolh.value || 0,
           target: this.carbsTarget,
-          unit: 'g',
-          color: 'teal'
+          unit: "g",
+          color: "teal"
         },
         {
-          title: 'Fett',
+          title: "Fett",
           percent: this.getPercent(this.totals.fett.value, this.fatTarget),
           total: this.totals.fett.value || 0,
           target: this.fatTarget,
-          unit: 'g',
-          color: 'red'
+          unit: "g",
+          color: "red"
         }
-      ]
+      ];
     }
   },
 
   methods: {
     getPercent(valueOne, valueTwo) {
-      const percent = valueOne && valueTwo ? Math.round((valueOne / valueTwo) * 100) : 0;
+      const percent =
+        valueOne && valueTwo ? Math.round((valueOne / valueTwo) * 100) : 0;
       return percent >= 0 ? percent : 0;
     }
   }
@@ -68,8 +69,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-div {
-  grid-column-start: 1;
-}
+  div {
+    grid-row: 1 / 2
+  }
+
 </style>
 
