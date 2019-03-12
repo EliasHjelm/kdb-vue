@@ -3,11 +3,8 @@
 @import 'header';
 @import 'home';
 @import 'footer';
-@import 'date-picker';
 @import 'add-entry-buttons';
 @import 'modal';
-@import 'entries';
-@import 'tdee-settings';
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -29,8 +26,8 @@ body {
 
   main {
     flex: 1;
-    display: grid;
-    grid-template-columns: 1fr min-content 1fr;
+    display: flex;
+    justify-content: center;
   }
 
   * {
@@ -47,5 +44,9 @@ body {
 
   h4 {
     font-size: 130%;
+  }
+
+  strong {
+    font-weight: 700;
   }
 }

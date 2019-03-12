@@ -1,30 +1,27 @@
 <template>
-  <div class="display-entries">
-    <table v-if="!loadingEntries">
-      <tr>
-        <th>Namn</th>
-        <th>Mängd</th>
-        <th>kcal</th>
-        <th>Ta Bort</th>
-      </tr>
-      <tr v-for="entry in entries" :key="entry.id" @click="selectEntry($event, entry)">
-        <td>{{ entry.name }}</td>
-        <td>
-          <input
+  <div>
+  <section class="display-entries">
+    <span><strong>Namn</strong></span>
+    <span><strong>Mängd</strong></span>
+    <span><strong>kcal</strong></span>
+    <span><strong>X</strong></span>
+    <template v-for="entry in entries">
+      
+      <span :key="entry.id + 'name'" @click="selectEntry($event, entry)" :class="getClassName(entry)">{{ entry.name }}</span>
+      <span :key="entry.id + 'amount'" :class="getClassName(entry)" @click="selectEntry($event, entry)">
+        <input
             type="number"
             :value="entry.quantity"
             @change="updateQuantity(entry.id, $event.srcElement.value)"
             @focus="$event.srcElement.select()"
           >
           {{ entry.unit }}
-        </td>
-        <td>{{ calculateKcal(entry) }}</td>
-        <td>
-          <button @click="deleteEntry(entry.id)">X</button>
-        </td>
-      </tr>
-    </table>
-    <app-spinner v-if="loadingEntries" />
+      </span>
+      <span :key="entry.id + 'kcal'" :class="getClassName(entry)" @click="selectEntry($event, entry)">{{ calculateKcal(entry) }}</span>
+      <span :key="entry.id + 'rm'" :class="getClassName(entry)"><button @click="deleteEntry(entry.id)">X</button></span>
+    </template>
+  </section>
+  <app-spinner v-if="loadingEntries" />
   </div>
 </template>
 
@@ -34,7 +31,7 @@ import spinner from '@/components/Spinner.vue'
 
 export default {
   components: {
-    "app-spinner": spinner
+    "app-spinner": spinner,
   },
   computed: {
     entries() {
@@ -86,20 +83,80 @@ export default {
 
     selectEntry(event, entry) {
       event.stopPropagation();
-      if (event.srcElement.outerHTML !== '<input type="number">' && event.srcElement.outerHTML !== '<button>X</button>') {
-        for (let child of event.srcElement.parentElement.parentElement.children) {
-          child.classList.remove("selected-entry");
-        }
+      if (!/^<input/.test(event.target.outerHTML)) {
         if (this.$store.state.selectedEntry === entry) {
           // this means we clicked the selected entry
           this.$store.dispatch('setSelectedEntry', false);
         } else {
           this.$store.dispatch('setSelectedEntry', entry);
-          event.srcElement.parentElement.classList.add('selected-entry');
         }
       }
+    },
+
+    getClassName(entry) {
+      return entry === this.$store.state.selectedEntry ? 'selected-entry' : ''
     }
   }
 };
 </script>
+
+
+<style lang="scss" scoped>
+section {
+  display: grid;
+  grid-template-columns: 20fr minmax(max-content, 4fr) minmax(max-content, 3fr) min-content;
+  margin-bottom: 20px;
+
+  span {
+    border: 1.5px solid rgb(222, 226, 230);
+    border-right-width: 0;
+    border-top-width: 0;
+    padding: 0.2rem 0.6rem;
+    transition: background-color 0.2s;
+    cursor: pointer;
+
+    
+
+    &:nth-child(4n) {
+      border-right-width: 1.5px;
+    }
+
+    &:nth-child(-n + 4) {
+      border-top-width: 1.5px;
+      padding: 0.5rem;
+    }
+
+    &:nth-child(4n + 1) {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    &:nth-child(8n + 5), &:nth-child(8n + 6), &:nth-child(8n + 7), &:nth-child(8n + 8) {
+      background-color: #f4f4f4
+    }
+
+    &:hover {
+      background-color: #eee;
+    }
+
+    &.selected-entry {
+      background-color: #bbb;
+
+      &:hover {
+        background-color: #aaa;
+      }
+    }
+    
+
+    input {
+      width: 40px;
+      margin-right: 5px;
+      border-radius: 3px;
+      border: 1px solid rgba(0, 0, 0, 0.5);
+      padding: 2px;
+    }
+  }
+}
+</style>
 

@@ -7,13 +7,17 @@ import db from '@/main.js';
 const actions = {
 
   async login(context, payload) {
+    // we throw perhaps one time too many here
     const { email, password } = payload;
-    const user = await firebase.auth().signInWithEmailAndPassword(email, password);
-    if (user) {
+    try {
+      //catch block does not catch this fish so we have to .catch
+      const user = await firebase.auth().signInWithEmailAndPassword(email, password)
+        .catch(e => { throw e })
       context.commit('login', user.user);
       context.dispatch('getUserData', user.user);
-      return true
-    } else { return false }
+    } catch(e) {
+      throw e
+    }
   },
 
   async logout(context) {
@@ -70,7 +74,7 @@ const actions = {
     const userData = snapshot.data();
     context.commit('setUserData', userData);
   },
-  
+
   async setUserData(context, newUserData) {
     if (context.state.loggedIn) {
       await db.collection('users').doc(context.state.user.uid).set(newUserData, { merge: true });

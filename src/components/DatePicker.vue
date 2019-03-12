@@ -1,9 +1,9 @@
 <template>
   <div class="date-picker">
     <!-- eslint-disable-next-line -->
-    <span class="yesterday" @click="goToYesterday"><<</span>
-    <span class="today">{{ selectedDate }}</span>
-    <span class="tomorrow" @click="goToTomorrow">>></span>
+    <span class="yesterday" @click="goToYesterday"><strong><<</strong></span>
+    <span class="today"><strong>{{ selectedDate }}</strong></span>
+    <span class="tomorrow" @click="goToTomorrow"><strong>>></strong></span>
   </div>
 </template>
 
@@ -24,4 +24,20 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.date-picker {
+  display: flex;
+  justify-content: space-around;
+  border: 1.5px solid rgb(222, 226, 230);  
+  padding: 0.5rem;
+  border-bottom-width: 0;
+  margin-bottom: 0;
+
+  .yesterday, .tomorrow {
+    cursor: pointer;
+  }
+}
+</style>
+
 
