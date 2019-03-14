@@ -3,8 +3,13 @@
   <h3>{{ heading }}</h3>
     <div class="bars">
       <template v-for="(bar, index) in bars">
-        <span :key="index + 'span'">{{ bar.title }}</span>
-        <div :key="index + 'div'" class="progress-bar">
+        <span :key="index + 'span'">
+          {{ bar.title }}
+          <transition name="fade">
+            <breakdown-tooltip v-if="showTooltips[bar.title]" @mouseover.native="showTooltips[bar.title] = true" @mouseleave.native="showTooltips[bar.title] = false" v-bind="bar" style="right: -10rem;" />
+          </transition>
+        </span>
+        <div :key="index + 'div'" class="progress-bar" @mouseover="$set(showTooltips, bar.title, true)" @mouseleave="showTooltips[bar.title] = false">
           <div class="meter" :style="`width: ${bar.percent}%; background-color: ${bar.color}`"></div>
           <span>{{ `${bar.total}${bar.unit} / ${bar.target}${bar.unit} (${bar.percent}%)` }}</span>          
         </div>
@@ -15,7 +20,12 @@
 </template>
 
 <script>
+import breakdownTooltip from '@/components/BreakdownTooltip.vue'
+
 export default {
+  components: {
+    'breakdown-tooltip': breakdownTooltip
+  },
   props: {
     bars: {
       type: Array,
@@ -32,8 +42,12 @@ export default {
         return value.length > 2 && value.length < 15
       }
     }
-  }
-  
+  },
+  data: function() {
+    return {
+      showTooltips: {}
+    }
+  }  
 }
 </script>
 
@@ -57,6 +71,7 @@ section {
 
     span {
         grid-column-start: 1;
+        position: relative;
       }
     
     .progress-bar {

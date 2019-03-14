@@ -7,15 +7,15 @@
       <div class="modal-body">
         <template v-if="!loading">
           <p>Email:</p>
-          <input type="email" name="register-email" v-model="email" :class="isEmailPristine ? '' : isEmailValid ? 'valid' : 'invalid'" @change="isEmailPristine = false">
+          <input type="email" name="register-email" v-model="email" :class="isEmailPristine ? '' : isEmailValid ? 'valid' : 'invalid'" @change.once="isEmailPristine = false">
           <p class="red-text" v-if="!isEmailPristine && !isEmailValid">
             Du måste ange en giltig epostadress
           </p>
           <p>Lösenord:</p>
-          <input type="password" name="register-password" v-model="password" :class="isPasswordPristine ? '' : isPasswordValid ? 'valid' : 'invalid'" @change="isPasswordPristine = false">
+          <input type="password" name="register-password" v-model="password" :class="isPasswordPristine ? '' : isPasswordValid ? 'valid' : 'invalid'" @change.once="isPasswordPristine = false">
           <p class="red-text" v-if="!isPasswordPristine && !isPasswordValid">Ditt lösenord måste vara minst sex tecken</p>
           <p>Bekräfta lösenord:</p>
-          <input type="password" name="register-password-conf" v-model="passwordConf" :class="isPasswordConfPristine ? '' : doPasswordsMatch ? 'valid' : 'invalid'" @input="isPasswordConfPristine = false">
+          <input type="password" name="register-password-conf" v-model="passwordConf" :class="isPasswordConfPristine ? '' : doPasswordsMatch ? 'valid' : 'invalid'" @input.once="isPasswordConfPristine = false">
           <p class="red-text" v-if="!isPasswordConfPristine && !doPasswordsMatch">Lösenorden stämmer inte överens</p>
         </template>
         <app-spinner v-if="loading" />

@@ -7,7 +7,7 @@ import config from '../firebase.js';
 
 firebase.initializeApp(config);
 
-firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
 const db = firebase.firestore();
 

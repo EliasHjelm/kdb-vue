@@ -28,7 +28,8 @@ export default {
           total: this.totals.kcal.value || 0,
           target: this.tdee,
           unit: " kcal",
-          color: "#f2f20e"
+          color: "#f2f20e",
+          breakdown: this.totals.kcal?.breakdown || []
         },
         {
           title: "Protein",
@@ -36,7 +37,8 @@ export default {
           total: this.totals.prot.value || 0,
           target: this.proteinTarget,
           unit: "g",
-          color: "lightblue"
+          color: "lightblue",
+          breakdown: this.totals.prot?.breakdown || []
         },
         {
           title: "Kolhydrater",
@@ -44,7 +46,8 @@ export default {
           total: this.totals.kolh.value || 0,
           target: this.carbsTarget,
           unit: "g",
-          color: "teal"
+          color: "teal",
+          breakdown: this.totals.kolh?.breakdown || []
         },
         {
           title: "Fett",
@@ -52,7 +55,8 @@ export default {
           total: this.totals.fett.value || 0,
           target: this.fatTarget,
           unit: "g",
-          color: "red"
+          color: "red",
+          breakdown: this.totals.fett?.breakdown || []
         }
       ];
     }

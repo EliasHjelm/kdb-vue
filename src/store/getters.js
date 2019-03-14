@@ -45,21 +45,21 @@ const getters = {
     const proteinRatio = 0.2;
     const proteinKcal = getters.tdee * proteinRatio;
     const proteinGrams = proteinKcal / 4;
-    return proteinGrams ? proteinGrams._format() : 0;
+    return proteinGrams ? +proteinGrams._format() : 0;
   },
 
   carbsTarget: (state, getters) => {
     const carbRatio = 0.4;
     const carbKcal = getters.tdee * carbRatio;
     const carbGrams = carbKcal / 4;
-    return carbGrams ? carbGrams._format() : 0;
+    return carbGrams ? +carbGrams._format() : 0;
   },
 
   fatTarget: (state, getters) => {
     const fatRatio = 0.4;
     const fatKcal = getters.tdee * fatRatio;
     const fatGrams = fatKcal / 9;
-    return fatGrams ? fatGrams._format() : 0;
+    return fatGrams ? +fatGrams._format() : 0;
   },
 
   totals: state => {
