@@ -7,8 +7,8 @@
     <span><strong>X</strong></span>
     <template v-for="entry in entries">
       
-      <span :key="entry.id + 'name'" @click="selectEntry($event, entry)" :class="getClassName(entry)">{{ entry.name }}</span>
-      <span :key="entry.id + 'amount'" :class="getClassName(entry)" @click="selectEntry($event, entry)">
+      <span :key="entry.id + 'name'" @click.stop="selectEntry($event, entry)" :class="getClassName(entry)">{{ entry.name }}</span>
+      <span :key="entry.id + 'amount'" :class="getClassName(entry)" @click.stop="selectEntry($event, entry)">
         <input
             type="number"
             :value="entry.quantity"
@@ -17,7 +17,7 @@
           >
           {{ entry.unit }}
       </span>
-      <span :key="entry.id + 'kcal'" :class="getClassName(entry)" @click="selectEntry($event, entry)">{{ calculateKcal(entry) }}</span>
+      <span :key="entry.id + 'kcal'" :class="getClassName(entry)" @click.stop="selectEntry($event, entry)">{{ calculateKcal(entry) }}</span>
       <span :key="entry.id + 'rm'" :class="getClassName(entry)"><button @click="deleteEntry(entry.id)">X</button></span>
     </template>
   </section>
@@ -48,41 +48,47 @@ export default {
         return Math.round(entry.nutrition.kcal.value * entry.quantity * 0.01);
       } else if (entry.type === "activity") {
         return Math.round((entry.kcal * entry.quantity) / 60);
+      } else {
+        return '-'
       }
     },
 
     updateQuantity(entryId, quantity) {
-      db.collection("entries")
-        .doc(this.$store.state.user.uid)
-        .collection(this.$store.state.selectedDate)
-        .doc(entryId)
-        .set(
-          {
-            quantity: quantity
-          },
-          { merge: true }
-        );
+      if (this.$store.state.loggedIn) {
+        db.collection("entries").doc(this.$store.state.user.uid).collection(this.$store.state.selectedDate).doc(entryId)
+          .set({ quantity: quantity }, { merge: true });
+      } else {
+        // we have to clone it as to not mutate state directly
+        const entries = JSON.parse(JSON.stringify(this.$store.state.dailyEntries))
+        const index = entries.findIndex(entry => entry.id === entryId)
+        entries[index] = { ...entries[index], quantity: quantity }
+        this.$store.dispatch('setEntries', entries)
+      }
     },
 
     async deleteEntry(entryId) {
 
       this.$store.dispatch('setSelectedEntry', false);
-      // error handling does not work atm
-      try {
-        const result = await db
-          .collection("entries")
-          .doc(this.$store.state.user.uid)
-          .collection(this.$store.state.selectedDate)
-          .doc(entryId)
-          .delete();
-        console.log("Document successfully deleted:", result);
-      } catch (error) {
-        console.error("Could not remove document:", entryId);
+      if (this.$store.state.loggedIn) {
+        try {
+          const result = await db
+            .collection("entries")
+            .doc(this.$store.state.user.uid)
+            .collection(this.$store.state.selectedDate)
+            .doc(entryId)
+            .delete();
+          console.log("Document successfully deleted:", result);
+        } catch (error) {
+          console.error("Could not remove document:", entryId);
+        }
+      } else {
+        const entries = this.$store.state.dailyEntries.filter(entry => entry.id !== entryId)
+        this.$store.dispatch('setEntries', entries)
+
       }
     },
 
     selectEntry(event, entry) {
-      event.stopPropagation();
       if (!/^<input/.test(event.target.outerHTML)) {
         if (this.$store.state.selectedEntry === entry) {
           // this means we clicked the selected entry
@@ -124,6 +130,10 @@ section {
     &:nth-child(-n + 4) {
       border-top-width: 1.5px;
       padding: 0.5rem;
+      cursor: default;
+      &:hover {
+        background-color: #fff;
+      }
     }
 
     &:nth-child(4n + 1) {

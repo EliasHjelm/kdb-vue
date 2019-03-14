@@ -3,21 +3,18 @@ import '@firebase/auth';
 import '@firebase/firestore';
 import db from '@/main.js';
 
+// leaving this here for now
+let localEntryCount = 0;
 
 const actions = {
 
   async login(context, payload) {
-    // we throw perhaps one time too many here
+    // i didnt manage to make this work with a try/catch block, somehow it didn't catch the awaited error
     const { email, password } = payload;
-    try {
-      //catch block does not catch this fish so we have to .catch
-      const user = await firebase.auth().signInWithEmailAndPassword(email, password)
-        .catch(e => { throw e })
-      context.commit('login', user.user);
-      context.dispatch('getUserData', user.user);
-    } catch(e) {
-      throw e
-    }
+    const response = await firebase.auth().signInWithEmailAndPassword(email, password)
+    context.commit('login', response.user);
+    context.dispatch('getUserData', response.user);
+    
   },
 
   async logout(context) {
@@ -31,8 +28,9 @@ const actions = {
   goToTomorrow(context) {
     context.commit('goToTomorrow');
   },
-  addEntry(context, payload) {
-    context.commit('addEntry', payload);
+  addEntry(context, entry) {
+    entry.id = ++localEntryCount;
+    context.commit('addEntry', entry);
   },
   setSelectedEntry(context, payload) {
     context.commit('setSelectedEntry', payload);
@@ -42,22 +40,24 @@ const actions = {
   },
   async fetchEntries(context) {
     context.commit('setEntries', []);
-    context.dispatch('setLoadingEntries', true);
-    context.state.unsubscribe();
-    // the return value from onSnapShot() is a function that "unsubscribes" from updates
-    const unsubscribeFunction = db.collection('entries')
-      .doc(context.state.user.uid)
-      .collection(context.state.selectedDate)
-      .onSnapshot((snapshot) => {
-        const entries = snapshot.docs.map(snapshot => {
-          const entry = snapshot.data();
-          entry.id = snapshot.id;
-          return entry
+    if (context.state.loggedIn) {
+      context.dispatch('setLoadingEntries', true);
+      context.state.unsubscribe();
+      // the return value from onSnapShot() is a function that "unsubscribes" from updates
+      const unsubscribeFunction = db.collection('entries')
+        .doc(context.state.user.uid)
+        .collection(context.state.selectedDate)
+        .onSnapshot((snapshot) => {
+          const entries = snapshot.docs.map(snapshot => {
+            const entry = snapshot.data();
+            entry.id = snapshot.id;
+            return entry
+          })
+          context.commit('setEntries', entries);
+          context.dispatch('setLoadingEntries', false);
         })
-        context.commit('setEntries', entries);
-        context.dispatch('setLoadingEntries', false);
-      })
-    context.commit('setUnsubscribe', unsubscribeFunction);
+      context.commit('setUnsubscribe', unsubscribeFunction);
+    }
 
   },
 
@@ -82,6 +82,10 @@ const actions = {
     } else {
       context.commit('setUserData', newUserData);
     }
+  },
+
+  setEntries(context, entries) {
+    context.commit('setEntries', entries)
   }
 }
 

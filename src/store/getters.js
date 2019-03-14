@@ -13,11 +13,21 @@ Number.prototype._format = function() {
 
 const getters = {
 
-  bmr: state => {
-    if (state.userData.gender === 'male') {
-      return Math.round((state.userData.weight * 10) + (6.25 * state.userData.height) - (5 * state.userData.age) + 5)
+  weight: state => {
+    if (state.dailyEntries.some(entry => entry.type === 'weight')) {
+      const dailyWeightEntries = state.dailyEntries.filter(entry => entry.type === 'weight').map(entry => entry.quantity)
+      const dailyWeight = dailyWeightEntries.reduce((a, c) => a + c) / dailyWeightEntries.length
+      return +dailyWeight._format()
     } else {
-      return Math.round((state.userData.weight * 10) + (6.25 * state.userData.height) - (5 * state.userData.age) - 161)
+      return state.userData.weight
+    }
+  },
+
+  bmr: (state, getters) => {
+    if (state.userData.gender === 'male') {
+      return Math.round((getters.weight * 10) + (6.25 * state.userData.height) - (5 * state.userData.age) + 5)
+    } else {
+      return Math.round((getters.weight * 10) + (6.25 * state.userData.height) - (5 * state.userData.age) - 161)
     }
 
   },

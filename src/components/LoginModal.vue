@@ -7,9 +7,9 @@
       <div class="modal-body" >
         <template v-if="!loading">
           <p>Email:</p>
-          <input type="email" name="login-email" v-model.lazy="email">
+          <input type="email" name="login-email" v-model.lazy="email" ref="email">
           <p>Lösenord:</p>
-          <input type="password" name="login-password" v-model.lazy="password" @keypress.enter="login">
+          <input type="password" name="login-password" v-model.lazy="password" @keydown.enter="login" ref="password">
         </template>
         <app-spinner v-if="loading" />
       </div>
@@ -32,6 +32,7 @@
 import modal from '@/components/Modal.vue';
 import spinner from '@/components/Spinner.vue';
 import alert from '@/components/Alert.vue';
+import Vue from 'vue';
 
 export default {
   components: {
@@ -54,19 +55,24 @@ export default {
       // function is young and optimistic
       this.failure = false;
       try {
-        const res = await this.$store.dispatch('login', { email: this.email, password: this.password });
+        await this.$store.dispatch('login', { email: this.email, password: this.password });
         this.$emit('close')
       } catch (e) {
-        console.log('loginModal caught a big cone', e)
+        console.log('catch', e)
         this.failure = true;
         this.loading = false;
+        await Vue.nextTick()
         switch (e.code) {
           case 'auth/user-not-found':
             this.errorMessage = 'Vi kunde inte hitta någon användare med den epost-adressen'
+            this.$refs.email.focus()
+            break
           case 'auth/invalid-email':
             this.errorMessage = 'Ogiltig epostadress'
+            break
           case 'auth/wrong-password':
             this.errorMessage = 'Felaktigt användarnamn eller lösenord'
+            break
         }
       }
 
@@ -76,8 +82,9 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 </style>
+
 
 

@@ -12,7 +12,9 @@
       </div>
       <div class="modal-footer">
         <template v-if="selectedItem.name">
-          <input type="number" name="grams" id="grams" v-model="inputGrams" ref="inputGrams" @keyup.enter="addFoodItem" @keydown.escape="$emit('close')"> g - {{ prospectiveCalories }} kcal
+          <span>
+            <input type="number" name="grams" id="grams" v-model="inputGrams" ref="inputGrams" @keydown.enter="addFoodItem" @keydown.escape="$emit('close')"> g - {{ prospectiveCalories }} kcal
+          </span>
           <button @click="addFoodItem">Lägg till</button>
         </template>
         <app-spinner v-if="this.loadingFoodItem" />
@@ -38,7 +40,8 @@ export default {
       selectedItem: {},
       inputGrams: 100,
       foodNames: require('@/assets/json/lvm-names.json'),
-      loadingFoodItem: false
+      loadingFoodItem: false,
+      entriesCount: 0
     };
   },
 
