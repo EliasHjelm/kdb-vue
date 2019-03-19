@@ -63,10 +63,10 @@ export default {
     async registerUser() {
       this.loading = true;
       const user = await firebase.auth().createUserWithEmailAndPassword(this.email, this.password);
-      console.log('user from firebase:', user);
       if (user) {
         console.log('successfully registered')
         await this.$store.dispatch('login', { email: this.email, password: this.password });
+        await firebase.auth().currentUser.sendEmailVerification()
         this.$emit('close')
       } else {
         this.failure = true;

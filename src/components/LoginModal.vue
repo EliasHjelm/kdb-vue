@@ -7,9 +7,9 @@
       <div class="modal-body" >
         <template v-if="!loading">
           <p>Email:</p>
-          <input type="email" name="login-email" v-model.lazy="email" ref="email">
+          <input type="email" name="login-email" v-model="email" ref="email">
           <p>Lösenord:</p>
-          <input type="password" name="login-password" v-model.lazy="password" @keydown.enter="login" ref="password">
+          <input type="password" name="login-password" v-model="password" @keydown.enter="login" ref="password">
         </template>
         <app-spinner v-if="loading" />
       </div>
@@ -19,7 +19,10 @@
             <p>{{errorMessage}}</p>
           </template>
         </app-alert>
-        <button @click="login">Logga in</button>
+        <div class="buttons">
+          <button @click="toggleRecoveryModal">Glömt ditt lösenord?</button>
+          <button @click="login">Logga in</button>
+        </div>
       </div>
 
     </template>
@@ -39,6 +42,12 @@ export default {
     "app-modal": modal,
     "app-spinner": spinner,
     "app-alert": alert
+  },
+  props: {
+    toggleRecoveryModal: {
+      type: Function,
+      required: true
+    }
   },
   data() {
     return {
@@ -83,6 +92,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.buttons {
+  grid-column-start: 2;
+
+  button {
+    margin: 0 0.3rem !important
+  }
+}
 
 </style>
 

@@ -55,6 +55,10 @@ const mutations = {
   
   clearUserData(state) {
     state.userData = {};
+  },
+
+  updateMedia(state, media) {
+    state.media = media
   }
 }
 

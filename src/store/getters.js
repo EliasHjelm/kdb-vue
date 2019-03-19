@@ -1,15 +1,17 @@
 // formatting function
 Number.prototype._format = function() {
-  return this < 1 
+  return Math.abs(this) < 1 
         ?
-        this.toFixed(2)
+        Number(this.toFixed(2))
         :
-        this < 100
+        Math.abs(this) < 100
         ?
-        this.toFixed(1)
+        Number(this.toFixed(1))
         :
-        this.toFixed(0)
+        Number(this.toFixed(0))
 }
+
+
 
 const getters = {
 
@@ -71,25 +73,32 @@ const getters = {
         breakdown: []
       }
     }
+
+    function addToBreakdown(name, nutrient, value) {
+      // prevent duplicate entries ie display 100g of raisins and 20g of raisins as 120g of raisins
+      const index = totals[nutrient].breakdown.findIndex(obj => obj.name === name);
+      if (index === -1) {
+        totals[nutrient].breakdown.push({
+          name: name,
+          value: value
+        })
+      } else {
+        // this way prevents 145.0000000002 results when adding
+        totals[nutrient].breakdown[index].value = (totals[nutrient].breakdown[index].value + value)._format()
+      }
+    }
     // if we have selected an entry, there will only be one iteration of the loop
     const entries = (state.selectedEntry) ? [state.selectedEntry] : state.dailyEntries
     for (let entry of entries) {
       if (entry.type === 'activity') {
-        totals.kcal.value = +(totals.kcal.value - (entry.kcal * entry.quantity / 60))._format()
+        const value = (-entry.kcal * entry.quantity / 60)._format()
+        totals.kcal.value = (totals.kcal.value + value)._format()
+        addToBreakdown(entry.name, 'kcal', value)
       } else if (entry.type === 'food') {
         for (let nutrient in entry.nutrition) {
-          totals[nutrient].value = +(totals[nutrient].value + (entry.nutrition[nutrient].value * entry.quantity * 0.01))._format();
-          // prevent duplicate entries in totals object (ie display 100g of raisins and 20g of raisins together as 120g)
-          const indexOfFood = totals[nutrient].breakdown.findIndex(obj => obj.name === entry.name);
-          if (indexOfFood === -1) {
-            totals[nutrient].breakdown.push({
-              name: entry.name,
-              value: +(entry.nutrition[nutrient].value * entry.quantity * 0.01)._format()
-            });
-          } else {
-            // this way prevents '146.000000000000002' results when we add stuff together
-            totals[nutrient].breakdown[indexOfFood].value = +(totals[nutrient].breakdown[indexOfFood].value +(entry.nutrition[nutrient].value * entry.quantity * 0.01))._format();
-          }
+          const value = (entry.nutrition[nutrient].value * entry.quantity * 0.01)._format()
+          totals[nutrient].value = (totals[nutrient].value + value)._format()
+          addToBreakdown(entry.name, nutrient, value)
         }
       }
     }

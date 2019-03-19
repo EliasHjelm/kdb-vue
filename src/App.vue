@@ -20,13 +20,17 @@ export default {
     'app-footer': footer
   },
   created() {
-    this.$store.dispatch('getUser');    
+    this.$store.dispatch('getUser'); 
+    this.listenForResize()   
   },
   methods: {
     handleUniversalClick() {
-      const selected = document.getElementsByClassName('selected-entry')[0];
-      selected && selected.classList.remove('selected-entry');
-      this.$store.dispatch('setSelectedEntry', false);
+      if (this.$store.selectedEntry) {
+        this.$store.dispatch('setSelectedEntry', false);
+      }
+    },
+    listenForResize() {
+      window.addEventListener('resize', () => this.$store.dispatch('updateSize'))
     }
   }
 

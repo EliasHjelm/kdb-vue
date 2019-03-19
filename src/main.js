@@ -14,6 +14,9 @@ const db = firebase.firestore();
 // give all vue instances access to the database connection:
 Vue.prototype.db = db;
 
+// give all instances access to matchmedia
+Vue.prototype.matchMedia = window.matchMedia.bind(window)
+
 db.settings({
   timestampsInSnapshots: true
 });

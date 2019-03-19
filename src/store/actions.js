@@ -13,8 +13,7 @@ const actions = {
     const { email, password } = payload;
     const response = await firebase.auth().signInWithEmailAndPassword(email, password)
     context.commit('login', response.user);
-    context.dispatch('getUserData', response.user);
-    
+    context.dispatch('getUserData', response.user);    
   },
 
   async logout(context) {
@@ -86,6 +85,13 @@ const actions = {
 
   setEntries(context, entries) {
     context.commit('setEntries', entries)
+  },
+
+  updateSize(context) {
+    const desktop = window.matchMedia('(min-width: 1024px').matches
+    context.commit('updateMedia', {
+      desktop: desktop
+    })
   }
 }
 

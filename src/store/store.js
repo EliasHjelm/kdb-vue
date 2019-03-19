@@ -127,7 +127,10 @@ export default new Vuex.Store({
     unsubscribe: function () {  },
     nutrientNames: nutrientNames,
     nutrientUnits: nutrientUnits,
-    loadingEntries: false
+    loadingEntries: false,
+    media: {
+      desktop: window.matchMedia('(min-width: 1024px)').matches
+    }
   },
 
   getters: getters,

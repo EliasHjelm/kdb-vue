@@ -4,3 +4,12 @@
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
+
+.nav-enter-active, .nav-leave-active {
+  transition: max-height 1s;
+  max-height: 500px;
+}
+
+.nav-enter, .nav-leave-to {
+  max-height: 10px;
+}
