@@ -5,10 +5,10 @@
         <h3>Lägg till aktivitet</h3>
       </div>
       <div class="modal-body">
-        <input type="text" name="search-activities" id="search-activities" placeholder="Sök efter aktivitet..." v-model="searchString" @input="getSuggestions">
-        <select name="activity-search-results" id="activity-search-results" size="10" ref="addActivitySelect" @change="selectActivity">
-          <option v-for="suggestion in searchSuggestions" :key="suggestion.id">{{ suggestion.name }}</option>
-        </select>
+        <input type="text" name="search-activities" id="search-activities" placeholder="Sök efter aktivitet..." @input="getSuggestions($event)">
+        <ul id="activity-search-results" ref="addActivitySelect">
+          <li v-for="(suggestion, index) in searchSuggestions" :key="suggestion.id" @click="selectActivity(index)" :class="suggestion.name === selectedItem.name ? 'selected' : ''">{{ suggestion.name }}</li>
+        </ul>
       </div>
       <div class="modal-footer" v-if="selectedItem.name">
         <input type="number" name="minutes" id="minutes" v-model="inputMinutes" ref="inputMinutes" @keyup.enter="addActivity"> min - {{ prospectiveCalories }} kcal
@@ -90,17 +90,14 @@ export default {
       this.showModal = false;
       this.searchString = '';
     },
-    getSuggestions() {
-      this.$refs.addActivitySelect.scrollTop = 0;
-      this.$refs.addActivitySelect.selectedIndex = -1;
+    getSuggestions(event) {
       this.selectedItem = {};
+      this.searchString = event.target.value
     },
     deselectActivity() {
       this.selectedItem = {};
-      this.$refs.addActivitySelect.selectedIndex = -1;
     },
-    async selectActivity() {
-      const index = this.$refs.addActivitySelect.selectedIndex;
+    async selectActivity(index) {
       this.selectedItem = this.searchSuggestions[index];
       await Vue.nextTick();
       this.$refs.inputMinutes.select();

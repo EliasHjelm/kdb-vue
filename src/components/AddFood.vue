@@ -5,10 +5,13 @@
         <h3>Lägg till livsmedel</h3>
       </div>
       <div class="modal-body">
-        <input type="text" name="search-foods" id="search-foods" placeholder="Sök efter livsmedel..." ref="foodSearchInput" v-model="searchString" @input="deselectFood" @keydown.escape="$emit('close')">
-        <select name="food-search-results" id="food-search-results" size="10" ref="addFoodSelect" @change="selectFoodItem">
-          <option v-for="suggestion in searchSuggestions" :key="suggestion.id">{{ suggestion }}</option>
-        </select>
+        <input type="text" name="search-foods" id="search-foods" placeholder="Sök efter livsmedel..." ref="foodSearchInput" @input="updateSearch($event)" @keydown.escape="$emit('close')">
+        <ul v-if="searchSuggestions.length" id="food-search-results" ref="addFoodSelect">
+          <li v-for="suggestion in searchSuggestions" :key="suggestion.id" @click="selectFoodItem($event, suggestion)" :class="selectedItem.name === suggestion ? 'selected' : ''">{{ suggestion }}</li>
+        </ul>
+        <p v-else>
+          Inga sökträffar för "{{searchString}}"
+        </p>
       </div>
       <div class="modal-footer">
         <template v-if="selectedItem.name">
@@ -100,7 +103,6 @@ export default {
   methods: {
     deselectFood() {
       this.selectedItem = {};
-      this.$refs.addFoodSelect.selectedIndex = -1;
     },
     closeModal() {
       this.showModal = false;
@@ -110,12 +112,16 @@ export default {
     openAddFoodModal() {
       this.showModal = true;
     },
-    async selectFoodItem() {
+    updateSearch(event) {
+      this.deselectFood()
+      this.searchString = event.target.value
+    },
+    async selectFoodItem(event, name) {
+      event.srcElement.classList.add('selected')
       this.selectedItem = false
       this.loadingFoodItem = true;
-      const index = this.$refs.addFoodSelect.selectedIndex;
-      const foodName = this.searchSuggestions[index];
-      const snapshot = await this.db.collection('foodItems').doc(foodName).get();
+      const snapshot = await this.db.collection('foodItems').doc(name).get();
+      event.srcElement.classList.remove('selected')
       this.selectedItem = snapshot.data();
       this.loadingFoodItem = false;
       await Vue.nextTick();

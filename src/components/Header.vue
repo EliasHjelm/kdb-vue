@@ -115,7 +115,7 @@ header {
       @media screen and (max-width: $breakpoint-tablet) {
         & {
           display: block;
-          margin: 0.5rem 0;
+          margin: 1rem 0;
         }
       }
     }
