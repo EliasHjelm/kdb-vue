@@ -12,7 +12,7 @@
         <input
             type="number"
             :value="entry.quantity"
-            @change="updateQuantity(entry.id, $event.srcElement.value)"
+            @change="updateQuantity(entry, $event.srcElement.value)"
             @focus="$event.srcElement.select()"
           >
           {{ entry.unit }}
@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     entries() {
-      return this.$store.state.dailyEntries;
+      return this.$store.getters.allEntries;
     },
     loadingEntries() {
       return this.$store.state.loadingEntries
@@ -53,14 +53,14 @@ export default {
       }
     },
 
-    updateQuantity(entryId, quantity) {
+    updateQuantity(entry, quantity) {
       if (this.$store.state.loggedIn) {
-        db.collection("entries").doc(this.$store.state.user.uid).collection(this.$store.state.selectedDate).doc(entryId)
-          .set({ quantity: quantity }, { merge: true });
+        db.collection("entries").doc(this.$store.state.user.uid).collection(entry.type === 'weight' ? 'weight' : this.$store.state.selectedDate).doc(entry.id)
+          .set({ quantity: +quantity }, { merge: true });
       } else {
         // we have to clone it as to not mutate state directly
         const entries = JSON.parse(JSON.stringify(this.$store.state.dailyEntries))
-        const index = entries.findIndex(entry => entry.id === entryId)
+        const index = entries.findIndex(oldEntry => oldEntry.id === entry.id)
         entries[index] = { ...entries[index], quantity: quantity }
         this.$store.dispatch('setEntries', entries)
       }
@@ -125,6 +125,7 @@ section {
 
     &:nth-child(4n) {
       border-right-width: 1.5px;
+      text-align: center;
     }
 
     &:nth-child(-n + 4) {

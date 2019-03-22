@@ -20,7 +20,8 @@ const defaultUserData = {
   height: 178,
   weight: 74,
   age: 28,
-  activityLevel: 'sedentary'
+  activityLevel: 'sedentary',
+  caloricAdjustment: 0
 }
 
 const nutrientNames = {
@@ -123,6 +124,7 @@ export default new Vuex.Store({
     loggedIn: false,
     selectedDate: formatDate(new Date()),
     dailyEntries: [],
+    dailyBiometrics: [],
     selectedEntry: false,
     unsubscribe: function () {  },
     nutrientNames: nutrientNames,

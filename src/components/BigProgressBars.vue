@@ -9,7 +9,7 @@
             <breakdown-tooltip v-if="showTooltips[bar.title]" @mouseover.native="showTooltips[bar.title] = true" @mouseleave.native="showTooltips[bar.title] = false" v-bind="bar" style="right: -10rem;" />
           </transition>
         </span>
-        <div :key="index + 'div'" class="progress-bar" @mouseover="$set(showTooltips, bar.title, true)" @mouseleave="showTooltips[bar.title] = false">
+        <div :key="index + 'div'" class="progress-bar" @mouseover="$set(showTooltips, bar.title, true)" @mouseleave="showTooltips[bar.title] = false" @touchstart="$set(showTooltips, bar.title, true)" @touchend.prevent="showTooltips[bar.title] = false">
           <div class="meter" :style="`width: ${bar.percent}%; background-color: ${bar.color}`"></div>
           <span>{{ `${bar.total}${bar.unit} / ${bar.target}${bar.unit} (${bar.percent}%)` }}</span>          
         </div>
@@ -102,6 +102,7 @@ section {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        user-select: none;
       }
     }
   }

@@ -38,7 +38,7 @@ const actions = {
     context.commit('setLoadingEntries', payload);
   },
   async fetchEntries(context) {
-    context.commit('setEntries', []);
+    context.commit('clearEntries');
     if (context.state.loggedIn) {
       context.dispatch('setLoadingEntries', true);
       context.state.unsubscribe();
@@ -55,7 +55,20 @@ const actions = {
           context.commit('setEntries', entries);
           context.dispatch('setLoadingEntries', false);
         })
-      context.commit('setUnsubscribe', unsubscribeFunction);
+      const unsubscribeBiometrics = db.collection('entries').doc(context.state.user.uid).collection('weight')
+        .where('date', '==', context.state.selectedDate).onSnapshot((snapshot) => {
+          const entries = snapshot.docs.map(snapshot => {
+            const entry = snapshot.data()
+            entry.id = snapshot.id
+            return entry
+          })
+          context.commit('setBiometrics', entries)
+        })
+        const unsubscribe = () => {
+          unsubscribeFunction()
+          unsubscribeBiometrics()
+        }
+      context.commit('setUnsubscribe', unsubscribe);
     }
 
   },
@@ -85,6 +98,10 @@ const actions = {
 
   setEntries(context, entries) {
     context.commit('setEntries', entries)
+  },
+
+  clearEntries(context) {
+    context.commit('clearEntries')
   },
 
   updateSize(context) {

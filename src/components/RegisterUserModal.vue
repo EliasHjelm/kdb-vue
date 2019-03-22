@@ -68,6 +68,7 @@ export default {
         await this.$store.dispatch('login', { email: this.email, password: this.password });
         await firebase.auth().currentUser.sendEmailVerification()
         this.$emit('close')
+        this.$router.push('/profil')
       } else {
         this.failure = true;
       }

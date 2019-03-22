@@ -42,14 +42,16 @@ export default {
 
   button {
     padding: 0.5rem;
-    margin-right: 1rem;
+    margin-right: 0.5rem;
     border-radius: 0.3rem;
     border: 0.07rem solid rgba(0, 0, 0, 0.3);
     cursor: pointer;
-    font-size: 100%;
+    font-size: 90%;
+    transition: all 0.2s;
     &:hover {
-      background-color: #ccc
+      background-color: #ddd;
     }
+    background-color: #fff;
   }
 
   margin-bottom: 0.5rem;

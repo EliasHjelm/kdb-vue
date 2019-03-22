@@ -14,7 +14,7 @@
         </span>
         <!-- We have to use $set (alias for Vue.set) to make the property reactive -->
         <div class="progress-bar" :key="index + 'p'" @mouseover="$set(showTooltips, bar.title, true)" 
-        @mouseleave="showTooltips[bar.title] = false">
+        @mouseleave="showTooltips[bar.title] = false" @touchstart="$set(showTooltips, bar.title, true)" @touchend.prevent="showTooltips[bar.title] = false">
           <div class="meter" :style="`width: ${bar.percent}%; background-color: ${bar.percent >= 100 ? 'lightgreen' : 'lightblue'}`" />
           <span class="progress">{{bar.target ? bar.percent + '%' : 'No target'}}</span>
         </div>
@@ -49,6 +49,11 @@ export default {
   },
   data: function() {
     return { showTooltips: {} };
+  },
+  methods: {
+    touch(event) {
+      alert(event)
+    }
   }
 };
 </script>

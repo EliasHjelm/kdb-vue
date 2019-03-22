@@ -46,7 +46,7 @@ export default {
     },
     async addWeightToDb(entry) {
       try {
-        await this.db.collection('entries').doc(this.$store.state.user.uid).collection(this.$store.state.selectedDate).add(entry)
+        await this.db.collection('entries').doc(this.$store.state.user.uid).collection('weight').add(entry)
         this.$emit("close");
       } catch (e) {
         console.error(e)

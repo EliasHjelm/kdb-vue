@@ -45,6 +45,15 @@ const mutations = {
     state.dailyEntries = entries;
   },
 
+  setBiometrics(state, biometrics) {
+    state.dailyBiometrics = biometrics
+  },
+
+  clearEntries(state) {
+    state.dailyEntries = [],
+    state.dailyBiometrics = []
+  },
+
   setUnsubscribe(state, unsubscribe) {
     state.unsubscribe = unsubscribe;
   },

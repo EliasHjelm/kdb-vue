@@ -1,18 +1,20 @@
 <template>
   <header>
-    <router-link to="/">
-      <h1>Kostdagboken.net</h1>
-    </router-link>
-      <img v-if="!desktop" class="hamburger-menu-icon" src="@/assets/images/menu-icon.svg" @click="menuCollapsed = !menuCollapsed">
-      <transition-expand>
-        <nav @click="collapseMenu" v-if="desktop || !menuCollapsed">
-          <router-link to="/">Start</router-link>
-          <router-link to="/profil" v-if="loggedIn">Profil</router-link>
-          <a href="#" v-if="!loggedIn" @click="showLoginModal = true">Logga in</a>
-          <a href="#" @click="registerUser = true" v-if="!loggedIn">Registrera</a>
-          <a href="#" @click="logout" v-if="loggedIn">Logga ut</a>
-        </nav>
-      </transition-expand>
+    <div class="header-content">
+      <router-link to="/">
+        <h1>Kostdagboken.net</h1>
+      </router-link>
+        <img v-if="!desktop" class="hamburger-menu-icon" src="@/assets/images/menu-icon.svg" @click="menuCollapsed = !menuCollapsed" alt="Hamburger menu icon">
+        <transition-expand>
+          <nav @click="collapseMenu" v-if="desktop || !menuCollapsed">
+            <router-link to="/">Start</router-link>
+            <router-link to="/profil" v-if="loggedIn">Profil</router-link>
+            <span class="nav-link" v-if="!loggedIn" @click="showLoginModal = true">Logga in</span>
+            <span class="nav-link" @click="registerUser = true" v-if="!loggedIn">Registrera</span>
+            <span class="nav-link" @click="logout" v-if="loggedIn">Logga ut</span>
+          </nav>
+        </transition-expand>
+    </div>
   <register-user-modal v-if="registerUser" @close="registerUser = false && collapseMenu()" />
   <login-modal v-if="showLoginModal" @close="showLoginModal = false && collapseMenu()" :toggleRecoveryModal="togglePasswordRecoveryModal" />
   <password-recovery-modal v-if="showPasswordRecoveryModal" @close="showPasswordRecoveryModal = false && collapseMenu()" />
@@ -41,8 +43,9 @@ export default {
     }
   },
   methods: {
-    logout() {
-      this.$store.dispatch('logout');
+    async logout() {
+      await this.$store.dispatch('logout')
+      this.$router.push('/')
     },
     expandMenu() {
       this.menuCollapsed = false
@@ -77,11 +80,23 @@ header {
   background-color: #333;
   padding: 20px 10px 3px 10px;
   transition: height 0.3s;
+  display: flex;
+  justify-content: center;
+
+  .header-content {
+    width: 100%;
+    max-width: 1100px;
+  }
 
   h1 {
     color: #eee;
     font-size: 170%;
     display: inline-block;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #bbb;
+    }
   }
 
   .hamburger-menu-icon {
@@ -105,12 +120,17 @@ header {
         }
       }
 
-    a {
+    a, span.nav-link {
       color: #eee;
       text-decoration: none;
       cursor: pointer;
       font-size: 110%;
       margin: 0 8px;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #bbb;
+      }
 
       @media screen and (max-width: $breakpoint-tablet) {
         & {

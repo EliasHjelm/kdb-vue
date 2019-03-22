@@ -14,7 +14,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      "tdee",
+      "kcalTarget",
       "proteinTarget",
       "carbsTarget",
       "fatTarget",
@@ -24,9 +24,9 @@ export default {
       return [
         {
           title: "Energi",
-          percent: this.getPercent(this.totals.kcal.value, this.tdee),
+          percent: this.getPercent(this.totals.kcal.value, this.kcalTarget),
           total: this.totals.kcal.value || 0,
-          target: this.tdee,
+          target: this.kcalTarget,
           unit: " kcal",
           color: "#f2f20e",
           breakdown: this.totals.kcal?.breakdown || []

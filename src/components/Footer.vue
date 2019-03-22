@@ -15,7 +15,7 @@ footer {
   height: 40px;
   background-color: #333;
   width: 100%;
-  padding: 5px;
+  padding: 5px !important;
 
   .copyright {
     color: #eee;

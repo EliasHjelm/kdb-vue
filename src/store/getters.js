@@ -15,9 +15,13 @@ Number.prototype._format = function() {
 
 const getters = {
 
+  allEntries: state => {
+    return state.dailyEntries.concat(state.dailyBiometrics)
+  },
+
   weight: state => {
-    if (state.dailyEntries.some(entry => entry.type === 'weight')) {
-      const dailyWeightEntries = state.dailyEntries.filter(entry => entry.type === 'weight').map(entry => entry.quantity)
+    if (state.dailyBiometrics.some(entry => entry.type === 'weight')) {
+      const dailyWeightEntries = state.dailyBiometrics.filter(entry => entry.type === 'weight').map(entry => entry.quantity)
       const dailyWeight = dailyWeightEntries.reduce((a, c) => a + c) / dailyWeightEntries.length
       return +dailyWeight._format()
     } else {
@@ -41,6 +45,10 @@ const getters = {
       high: 1.7
     }
     return Math.round(activityLevelConstants[state.userData.activityLevel] * getters.bmr)
+  },
+
+  kcalTarget: (state, getters) => {
+    return Math.round(getters.tdee + state.userData.weightChangeAmount * 250)
   },
 
   proteinTarget: (state, getters) => {

@@ -2,6 +2,9 @@
   <div class="home">
     <div class="settings-column">
       <tdee-settings/>
+      <div class="ad-container">
+        <!-- <img src="@/assets/images/160X600.jpg" alt="Fake advertisement"> -->
+      </div>
     </div>
     <div class="main-view">
       <add-entry-buttons/>
@@ -57,12 +60,21 @@ export default {
   align-items: start;
   max-width: 1100px;
 
+  .settings-column {
+
+    .ad-container {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
   @media screen and (max-width: $breakpoint-desktop) {
     grid-template-columns: 1fr;
     .settings-column {
       display: none;
     }
   }
+
 
   .macros-and-micros {
     margin-top: 0.5rem;

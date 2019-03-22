@@ -11,7 +11,7 @@
         </ul>
       </div>
       <div class="modal-footer" v-if="selectedItem.name">
-        <input type="number" name="minutes" id="minutes" v-model="inputMinutes" ref="inputMinutes" @keyup.enter="addActivity"> min - {{ prospectiveCalories }} kcal
+        <span><input type="number" name="minutes" id="minutes" v-model="inputMinutes" ref="inputMinutes" @keyup.enter="addActivity"> min - {{ prospectiveCalories }} kcal</span>
         <button @click="addActivity">Lägg till</button>
       </div>
     </template>

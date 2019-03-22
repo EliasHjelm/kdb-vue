@@ -54,6 +54,7 @@ export default {
   z-index: 3;
   padding: 0.2rem;
   box-shadow: 1px 1px 1px #000;
+  user-select: none;
 
   .tooltip-percent {
     font-weight: 600;
