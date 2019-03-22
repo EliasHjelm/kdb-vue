@@ -11,8 +11,8 @@ const mutations = {
   logout(state) {
     state.user = {};
     state.userData = defaultUserData;
-    state.dailyEntries = [];
     state.loggedIn = false;
+    this.dispatch('clearEntries')
   },
 
   goToYesterday(state) {

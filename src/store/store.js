@@ -21,7 +21,8 @@ const defaultUserData = {
   weight: 74,
   age: 28,
   activityLevel: 'sedentary',
-  caloricAdjustment: 0
+  caloricGoal: 'balance',
+  weightChangeAmount: 0
 }
 
 const nutrientNames = {

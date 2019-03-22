@@ -18,7 +18,7 @@
           <!-- <micro-targets/> -->
         </div>
       </div>
-      <patreon-link />
+      <!-- <patreon-link /> -->
     </div>
   </div>
 </template>
@@ -32,7 +32,7 @@ import macroTargets from "@/components/MacroTargets.vue";
 // import microTargets from "@/components/MicroTargets.vue";
 import vitaminTargets from "@/components/VitaminTargets.vue";
 import mineralTargets from "@/components/MineralTargets.vue";
-import patreonLink from "@/components/PatreonLink.vue";
+// import patreonLink from "@/components/PatreonLink.vue";
 
 export default {
   name: "home",
@@ -45,7 +45,7 @@ export default {
     // "micro-targets": microTargets,
     "vitamin-targets": vitaminTargets,
     "mineral-targets": mineralTargets,
-    "patreon-link": patreonLink
+    // "patreon-link": patreonLink
   }
 };
 </script>
