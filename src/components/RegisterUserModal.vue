@@ -7,7 +7,7 @@
       <div class="modal-body">
         <template v-if="!loading">
           <p>Email:</p>
-          <input type="email" name="register-email" v-model="email" :class="isEmailPristine ? '' : isEmailValid ? 'valid' : 'invalid'" @change.once="isEmailPristine = false">
+          <input type="email" name="register-email" v-model="email" :class="isEmailPristine ? '' : isEmailValid ? 'valid' : 'invalid'" @change.once="isEmailPristine = false" ref="email">
           <p class="red-text" v-if="!isEmailPristine && !isEmailValid">
             Du måste ange en giltig epostadress
           </p>
@@ -58,6 +58,9 @@ export default {
       isPasswordPristine: true,
       isPasswordConfPristine: true
     };
+  },
+  mounted() {
+    this.$refs.email.select()
   },
   methods: {
     async registerUser() {

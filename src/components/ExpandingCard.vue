@@ -61,6 +61,8 @@ section.expanding-card {
       text-align: center;
       font-weight: 600;
       cursor: pointer;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     span {

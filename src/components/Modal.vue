@@ -131,7 +131,7 @@ export default {};
     min-height: 75px;
     padding: 16px;
     display: grid;
-    grid-template-columns: 1fr max-content;
+    grid-template-columns: 1fr minmax(min-content, max-content);
     grid-column-gap: 1rem;
     align-items: start;
 

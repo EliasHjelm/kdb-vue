@@ -12,13 +12,13 @@
           <input type="password" name="login-password" v-model="password" @keydown.enter="login" ref="password">
         </template>
         <app-spinner v-if="loading" />
-      </div>
-      <div class="modal-footer">
         <app-alert v-if="failure">
           <template slot="content">
             <p>{{errorMessage}}</p>
           </template>
         </app-alert>
+      </div>
+      <div class="modal-footer">
         <div class="buttons">
           <button @click="toggleRecoveryModal">Glömt ditt lösenord?</button>
           <button @click="login">Logga in</button>
@@ -49,6 +49,9 @@ export default {
       required: true
     }
   },
+  mounted() {
+    this.$refs.email.select()
+  },
   data() {
     return {
       email: '',
@@ -67,17 +70,17 @@ export default {
         await this.$store.dispatch('login', { email: this.email, password: this.password });
         this.$emit('close')
       } catch (e) {
-        console.log('catch', e)
         this.failure = true;
         this.loading = false;
         await Vue.nextTick()
         switch (e.code) {
           case 'auth/user-not-found':
             this.errorMessage = 'Vi kunde inte hitta någon användare med den epost-adressen'
-            this.$refs.email.focus()
+            this.$refs.email.select()
             break
           case 'auth/invalid-email':
             this.errorMessage = 'Ogiltig epostadress'
+            this.$refs.email.select()
             break
           case 'auth/wrong-password':
             this.errorMessage = 'Felaktigt användarnamn eller lösenord'
